@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        table{
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 1200px;
+            text-align: center;
+            margin: 0 auto;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        table img{
+            vertical-align: middle;
+        }
+        a{
+            text-decoration: none;
+        }
+        .box{
+            width: 1200px;
+            margin: 0 auto;
+            height: 80px;
+        }
+        .title{
+            width: 1200px;
+            height: 57px;
+            background: url(img/bg1.png) no-repeat;
+            background-size:cover ;
+            margin: 0 auto;
+        }
+        .pic1{
+            float: left;
+            margin-left: 5px;
+        }
+        .text1{
+            float: left;
+            line-height: 57px;
+            font-weight: 700;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #fff;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+        .pic2{
+            float: left;
+            margin: 8px 0 8px 600px;
+        }
+        .text2{
+            float: left;
+            font-size: 14px;
+            line-height: 57px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #fff;
+            margin-left: 10px;
+        }
+        .btns{
+            float: right;
+        }
+        .btns button{
+            background: #00a1ff;
+            font-size: 12px;
+            height: 24px;
+            line-height: 24px;
+            vertical-align: top;
+            outline: none;
+            border: none;
+            padding: 0 20px;
+            border-radius: 5px;
+            margin: 4px 6px 0;
+        }
+        .btns button a{
+            color: #fff;
+            font-size: 12px;
+            display: block;
+        }
+        .b1{
+            margin: 0 auto;
+            width: 23px;
+            height: 30px;
+            background: url(img/icon5.png) no-repeat;
+            transition: all .3s;
+        }
+        .b1:hover{
+            background: url(img/icon10.png) no-repeat;
+        }
+        .b2{
+            margin: 0 auto;
+            width: 23px;
+            height: 30px;
+            background: url(img/icon6.png) no-repeat;
+            transition: all .3s;
+        }
+        .b2:hover{
+            background: url(img/icon11.png) no-repeat;
+        }
+        .b3{
+            margin: 0 auto;
+            width: 48px;
+            height: 30px;
+            background: url(img/icon7.png) no-repeat;
+            transition: all .3s;
+        }
+        .b3:hover{
+            background: url(img/icon9.png) no-repeat;
+        }
+        .parent{
+            position: relative;
+            width: 1200px;
+            height: 100%;
+            margin: 0 auto;
+            z-index: 1;
+        }
+        .inner{
+            width: 1200px;
+            height: 100%;
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            background: rgba(222, 222, 222, .8);
+            z-index: 20;
+        }
+        .tips{
+            width: 400px;
+            height: 150px;
+            background: #afafaf;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            border: 2px solid #000000;
+            border-radius: 35px;
+            text-align: center;
+        }
+        .tips p{
+            color: #fff;
+            font-size: 18px;
+            margin: 40px 0 20px;
+        }
+        .tips img{
+            width: 35px;
+            margin: 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="parent">
+        <div class="box">
+            <div class="title">
+                <div class="pic1">
+                    <a href="#"><img src="img/icon3.png" alt=""></a>
+                </div>
+                <div class="text1">Watch Recruit ment Platform</div>
+                <div class="pic2">
+                    <a href="#"><img src="img/icon4.png" alt=""></a>
+                </div>
+                <div class="text2">Ethan Wong</div>
+            </div>
+            <div class="btns">
+                <button><a href="#">Request</a></button>
+                <button><a href="#">Upload</a></button>
+            </div>
+        </div>
+        <table>
+            <tr style="height: 55px;">
+                <td></td>
+                <td>姓名<br>Name</td>
+                <td>性别<br>Gender</td>
+                <td>畢業院校 <br>School</td>
+                <td>專業<br>Major</td>
+                <td>學歷<br>Education</td>
+                <td>畢業時間<br>Graduated</td>
+                <td>工作經驗<br>Experience</td>
+                <td>英語<br>E-level</td>
+                <td>簡歷<br>Resume</td>
+                <td>面試?<br>Interview?</td>
+                <td>部門<br>Dept</td>
+                <td>錄用？<br>Hire?</td>
+            </tr>
+            <tr>
+                <td colspan="13" style="border-top: 2px solid #ddd; height: 10px;"></td>
+            </tr>
+            <tr style="height: 45px;">
+                <td><a href="#"><img src="img/icon8.png" alt=""></a></td>
+                <td>李小波</td>
+                <td>女</td>
+                <td>西華大學</td>
+                <td>物流管理</td>
+                <td>本科</td>
+                <td>2021</td>
+                <td>N/A</td>
+                <td>四級</td>
+                <td><a href="#"><div class="b1"></div></a></td>
+                <td><a href="#"><div class="b2"></div></a></td>
+                <td>Ethan</td>
+                <td><a href="#"><div class="b3"></div></a></td>
+            </tr>
+        </table>
+        <div class="inner">
+            <div class="tips">
+                <p>Do you want to interview this candidate?</p>
+                <a href="main.html"><img src="img/w.png" alt=""></a>
+                <a href="#"><img src="img/r.png" alt=""></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

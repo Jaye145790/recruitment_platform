@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/toastr.min.css" />
+    <script src="/static/js/toastr.min.js"></script>
+    <title>招募平台登录</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .box1{
+            width: 1200px;
+            height: 591px;
+            margin: 0 auto;
+            background: url(static/img/bg2.jpg) no-repeat;
+            background-size: cover;
+            position: relative;
+        }
+        .fonts{
+            color: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+            position: absolute;
+            font-size: 30px;
+            font-weight: bold;
+            top: 300px;
+            right: 50px;
+        }
+        .box2{
+            width: 1200px;
+            height: 160px;
+            margin: 0 auto;
+            border-top: 1px solid transparent;
+        }
+        .inner{
+            display: flex;
+            width: 600px;
+            justify-content: space-between;
+            margin: 0 auto;
+            height: 60px;
+            margin: 50px auto;
+        }
+        .two,.five{
+            color: #0070c9;
+            height: 61px;
+            line-height: 61px;
+        }
+        a{
+            text-decoration: none;
+        }
+		.title2{
+		    width: 1200px;
+		    margin: 100px auto 0;
+		    text-align: center;
+		}
+		.title2 input{
+		    display: block;
+		    margin: 30px auto 0;
+		    width: 240px;
+		    height: 34px;
+		    padding-left:10px;
+		    outline: none;
+		    border-radius: 10px;
+		    border: 1px solid #afafaf;
+		}
+		.btns{
+		    float: center;
+		}
+		.btns button{
+		    background: #00a1ff;
+		    font-size: 12px;
+		    height: 24px;
+		    line-height: 24px;
+		    vertical-align: top;
+		    outline: none;
+		    border: none;
+		    padding: 0 20px;
+		    border-radius: 5px;
+		    margin: 4px 6px 0;
+		}
+		.btns button a{
+		    color: #fff;
+		    font-size: 12px;
+		    display: block;
+		}
+    </style>
+</head>
+
+<body>
+    <!-- <label>用户名：</label><input type="text" id="username"><br>
+    <label>密 码：</label><input type="password" id="password"><br>
+    <input type="button" value="登录" onclick="login()"> -->
+	<div class="box1">
+	    <div class="fonts">Watch Recruitment Platform</div>
+	</div>
+	<div class="title2">
+		<h4>Enter username and password to get started</h4>
+		<input type="text" id="username"><br>
+		<input type="password" id="password"><br>
+		<input type="button" value="continue" onclick="login()">
+			<!-- <form action="#">
+			    <input type="text" id="Username">
+				<input type="text" id="Password">
+			</form>
+			<div class="btns">
+				<button><a href="login2.html">Continue</a></button>
+			</div> -->
+	</div>
+    <script>
+        function login() {
+            var formdata = {
+                "username": $("#username").val(),
+                "password": $("#password").val(),
+            }
+            $.ajax({
+                url: "/login",
+                type: "POST",
+                data: JSON.stringify(formdata),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(result) {
+                    if (result.result == "OK") {
+                        toastr["success"]("登录成功")
+                        setTimeout(next_url(result.next_url), 3000);
+                    } else if (result.result == "NO") {
+                        toastr["error"](result.msg)
+                    }
+                },
+                error: function() {
+                    toastr["error"]("网络连接失败");
+                }
+            })
+        }
+
+        function next_url(url) {
+            window.location.href = url;
+        }
+    </script>
+</body>
+
+</html>

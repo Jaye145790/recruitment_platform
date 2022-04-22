@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<script src="/static/js/upload.js"></script>
+	<script src="/static/js/jquery-3.3.1.min.js"></script>
+	<script src="/static/js/toastr.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="/static/css/toastr.min.css" />
+    <title>Upload</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        a{
+            text-decoration: none;
+        }
+        .box{
+            width: 1200px;
+            margin: 0 auto;
+            height: 60px;
+        }
+        .title1{
+            width: 1200px;
+            height: 57px;
+            background: url(static/img/bg1.png) no-repeat;
+            background-size:cover ;
+            margin: 0 auto;
+        }
+        .pic1{
+            float: left;
+            margin-left: 5px;
+        }
+        .text1{
+            float: left;
+            line-height: 57px;
+            font-weight: 700;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #fff;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+        .pic2{
+            float: left;
+            margin: 8px 0 8px 600px;
+        }
+        .text2{
+            float: left;
+            font-size: 14px;
+            line-height: 57px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #fff;
+            margin-left: 10px;
+        }
+        .title2{
+            width: 1200px;
+            margin: 10px auto 0;
+            text-align: center;
+        }
+        .title2 h2{
+            font-size: 22px;
+            line-height: 2;
+        }
+        .title2 input{
+            display: block;
+            margin: 20px auto 0;
+            width: 240px;
+            height: 34px;
+            padding-left:10px;
+            outline: none;
+            border-radius: 10px;
+            border: 1px solid #afafaf;
+        }
+        .title2 button{
+            background: #9edbff;
+            display: block;
+            margin: 24px auto 0;
+            border: none;
+            outline: none;
+            border-radius: 6px;
+            height: 30px;
+            position: absolute;
+        }
+        .title2 button a{
+            text-decoration: none;
+            color: #fff;
+            display: block;
+        }
+        .title2 button.b1{
+            top: 120px;
+            left: 780px;
+            background: #00a1ff;
+            width: 100px;
+        }
+        .title2 button.b2{
+            top: 160px;
+            left: 780px;
+            background: #afafaf;
+            width: 100px;
+        }
+        form{
+            margin-top: 20px;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="title1">
+            <div class="pic1">
+                <a href="#"><img src="static/img/icon3.png" alt=""></a>
+            </div>
+            <div class="text1">Watch Recruitment Platform</div>
+            <div class="pic2">
+                <a href="#"><img src="static/img/icon4.png" alt=""></a>
+            </div>
+            <div class="text2">{{current_user.nickname}}</div>
+        </div>
+    </div>
+    <div class="title2">
+        <h2>Enter the information below for new candidate</h2>
+            <form action='#'>
+                <input type="text" placeholder="姓名 Name">
+                <input type="text" placeholder="性別 Gender">
+                <input type="text" placeholder="畢業院校 School">
+                <input type="text" placeholder="專業 Major">
+                <input type="text" placeholder="學歷 Education">
+                <input type="text" placeholder="畢業時間 Graduated">
+                <input type="text" placeholder="工作經驗 Experience">
+                <input type="text" placeholder="英語 E-level">
+				<!-- <input type="file" name="file" id="file" />
+				<input type="button" value="Upload" onclick="upload()" /> -->
+                <button class="b2"><a href="/main">Main Page</a></button>
+            </form>
+			<form accept-charset="utf-8" enctype="multipart/form-data" id="uploadform">
+			    <input type="file" name="file" id="file" />
+			    <input type="button" value="Upload" onclick="upload()" />
+			</form>
+    </div>
+</body>
+</html>
