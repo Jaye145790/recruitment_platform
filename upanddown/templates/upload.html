@@ -122,21 +122,19 @@
     <div class="title2">
         <h2>Enter the information below for new candidate</h2>
             <form action='#'>
-                <input type="text" placeholder="姓名 Name">
-                <input type="text" placeholder="性別 Gender">
-                <input type="text" placeholder="畢業院校 School">
-                <input type="text" placeholder="專業 Major">
-                <input type="text" placeholder="學歷 Education">
-                <input type="text" placeholder="畢業時間 Graduated">
-                <input type="text" placeholder="工作經驗 Experience">
-                <input type="text" placeholder="英語 E-level">
-				<!-- <input type="file" name="file" id="file" />
-				<input type="button" value="Upload" onclick="upload()" /> -->
+                <input type="text" placeholder="姓名 Name" id="name">
+                <input type="text" placeholder="性別 Gender" id="gender">
+                <input type="text" placeholder="畢業院校 School" id="school">
+                <input type="text" placeholder="專業 Major" id="major">
+                <input type="text" placeholder="學歷 Education" id="education">
+                <input type="text" placeholder="畢業時間 Graduated" id="graduated">
+                <input type="text" placeholder="工作經驗 Experience" id="experience">
+                <input type="text" placeholder="英語 E-level" id="level">
                 <button class="b2"><a href="/main">Main Page</a></button>
             </form>
 			<form accept-charset="utf-8" enctype="multipart/form-data" id="uploadform">
 			    <input type="file" name="file" id="file" />
-			    <input type="button" value="Upload" onclick="upload()" />
+			    <input type="button" value="Upload" onclick="interviewee();upload();" />
 			</form>
     </div>
 </body>

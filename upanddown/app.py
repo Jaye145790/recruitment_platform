@@ -5,6 +5,9 @@ from models import *
 import os
 import json
 import random
+import sys
+
+# sys.setrecursionlimit(10000000)
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.config.from_object("config")
@@ -58,14 +61,13 @@ def success():
     return render_template("success.html")
 
 
+# 上传信息
 @app.route("/upload", methods=["POST", "GET"])
 def upload():
     if request.method == "GET":
         return render_template("upload.html")
     elif request.method == "POST":
-        err_msg = {
-            "result": "NO"
-        }
+        err_msg = {"result": "NO"}
         param = json.loads(request.data.decode("utf-8"))
         name = param.get("name", "")
         gender = param.get("gender", "")
@@ -74,13 +76,26 @@ def upload():
         education = param.get("education", "")
         graduated = param.get("graduated", "")
         experience = param.get("experience", "")
-        e_level = param.get("e_level", "")
+        level = param.get("level", "")
         resume = param.get("resume", "")
         interview = param.get("interview", "")
-        dept = param.get("dept", "")
         hire = param.get("hire", "")
         if not name:
             err_msg["msg"] = "缺少姓名"
+            return jsonify(err_msg)
+        interviewee = Interviewee.objects(name=name)
+        # 判断姓名是否重复
+        if not interviewee:
+            interviewee = Interviewee(name=name, gender=gender, school=school,
+                                      major=major, education=education,
+                                      graduated=graduated,
+                                      experience=experience,
+                                      level=level, resume=resume,
+                                      interview=interview, hire=hire)
+            interviewee.save()
+            return jsonify({"result": "OK"})
+        else:
+            err_msg["msg"] = "简历信息已经上传"
             return jsonify(err_msg)
 
 
@@ -89,9 +104,7 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
     elif request.method == "POST":
-        err_msg = {
-            "result": "NO"
-        }
+        err_msg = {"result": "NO"}
         param = json.loads(request.data.decode("utf-8"))
         username = param.get("username", "")
         password = param.get("password", "")
@@ -110,14 +123,13 @@ def register():
             random_floder = random.randint(0, 10000)
             while random_floder in os.listdir(download_floder):
                 random_floder = random.randint(0, 10000)
-            user = User(username=username, nickname=nickname,
+            user = User(username=username,
+                        nickname=nickname,
                         floder=str(random_floder))
             user.hash_password(password)
             os.mkdir(os.path.join(download_floder, user.floder))
             print(os.path.join(download_floder, user.floder))
-            return jsonify({
-                "result": "OK"
-            })
+            return jsonify({"result": "OK"})
         else:
             err_msg["msg"] = "用户已经注册"
             return jsonify(err_msg)
@@ -134,9 +146,7 @@ def login():
     if request.method == "GET":
         return render_template("login.html")
     elif request.method == "POST":
-        err_msg = {
-            "result": "NO"
-        }
+        err_msg = {"result": "NO"}
         param = json.loads(request.data.decode("utf-8"))
         username = param.get("username", "")
         password = param.get("password", "")
@@ -154,10 +164,7 @@ def login():
             err_msg["msg"] = "密码错误"
             return jsonify(err_msg)
         login_user(user)
-        return jsonify({
-            "result": "OK",
-            "next_url": "/main"
-        })
+        return jsonify({"result": "OK", "next_url": "/main"})
 
 
 @app.route("/upload_btn", methods=["POST"])
@@ -206,5 +213,5 @@ def delete_file(filename):
 if __name__ == '__main__':
     if not os.path.exists(download_floder):
         os.makedirs(download_floder)
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5223, debug=True)
 
