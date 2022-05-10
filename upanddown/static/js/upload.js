@@ -54,9 +54,9 @@ function interviewee() {
 	    contentType: "application/json",
 	    success: function(result) {
 	        if (result.result == "OK") {
-	            // toastr["success"]("简历信息上传")
+	            toastr["success"]("简历信息上传")
 	        } else if (result.result == "NO") {
-	            // toastr["error"](result.msg)
+	            toastr["error"](result.msg)
 	        }
 	    },
 	    error: function() {

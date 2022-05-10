@@ -224,6 +224,8 @@
 	        <button><a href="#">Request</a></button>
 	        <button><a href="/upload">Upload</a></button>
 			<form accept-charset="utf-8" enctype="multipart/form-data" id="uploadform">
+			    <!-- <input type="file" name="file" id="file" />
+			    <input type="button" value="上传" onclick="upload()" /> -->
 			</form>
 	    </div>
 	
@@ -274,8 +276,10 @@
 		var popUpBox1 = document.querySelector('.popUp-box1')
 		var itemDom
 		
+		//简历
 		function b1_1(rot) {
 		    itemDom = rot.parentNode.parentNode.parentNode
+			console.log(itemDom.children[9].children[0].children[0])
 		    if ( itemDom.children[9].children[0].children[0].style.backgroundImage == 'url("/static/img/icon5.png")') {
 		        itemDom.children[9].children[0].children[0].style.backgroundImage = 'url("/static/img/icon10.png")'
 		    } else if (itemDom.children[9].children[0].children[0].style.backgroundImage == 'url("/static/img/icon10.png")') {
@@ -283,16 +287,20 @@
 		    }
 		}
 		
+		//面试  b2_2(rot)是一个绑定面试点击事件
 		function b2_2(rot) {
 		    popUpBox.style.display = 'block';
 		    popUpBox.parentNode.style.display = 'block';
 		    itemDom = rot.parentNode.parentNode.parentNode
+			
 		}
+		//录用
 		function b4_4(rot) {
 		    itemDom = rot.parentNode.parentNode.parentNode
 		    popUpBox1.style.display = 'block';
 		    popUpBox1.parentNode.style.display = 'block';
 		}
+		//b3是否为实现hire定时器
 		if (b3) {
 		    b3.onclick = function () {
 		        if (this.style.backgroundImage == 'url("/static/img/icon7.png")') {
@@ -319,6 +327,11 @@
 		    }
 		
 		}
+		 //点击cover盒子 隐藏下拉框
+		 cover.onclick = function(){
+		     popUpLogin.style.display = 'none'
+		    cover.style.display = 'none';
+		}
 		// 删除
 		function deleteRow(r) {
 		    console.log(r.parentNode)
@@ -326,7 +339,7 @@
 		    console.log(i)
 		    document.getElementById('myTable').deleteRow(i);
 		}
-		// 关闭
+		// 关闭popUp弹出框
 		function closePop() {
 		    console.log('关闭')
 		    popUpBox.style.display = 'none';
@@ -349,22 +362,32 @@
 		    popUpLogin.style.display = 'none'
 		    cover.style.display = 'none';
 		}
-		// 确定 
+		// 面试栏点击确定 
 		function confirm() {
-		    console.log(itemDom.children[10])
+		    //console.log(itemDom.children[10])
 		    itemDom.children[11].children[0].style.display = 'block'
 		    itemDom.children[10].children[0].children[0].style.backgroundImage = 'url("/static/img/icon6.png")'
 		    popUpBox.style.display = 'none';
 		    popUpBox.parentNode.style.display = 'none';
 		    itemDom.children[9].children[0].children[0].style.backgroundImage = 'url("/static/img/icon5.png")'
 		    itemDom.children[12].children[0].children[0].style.backgroundImage = 'url("/static/img/icon9.png")'
+			//console.log(itemDom.children[10].children[0].children[0])
+			//思维一由于onclick是一个重复点击事件，想到在第一次点击后移除该点击事件
+			itemDom.children[10].children[0].children[0].onclick = ''
+			//console.log(itemDom.children[9].children[0].children[0])
+			//移除简历按键b1_1的下载功能  注意b1_1简历的下载功能函数在链接a标签上即为b1盒子外第一层父元素
+			//console.log(itemDom.children[9].children[0]) 可以找到b1_1外的第一层父元素
+			//禁用该元素的超链接
+			itemDom.children[9].children[0].onclick = function(){return false;}
+			
 		}
-		// 确定 
+		// 录用栏点击确定 
 		function confirm1() {
 		    console.log(itemDom.children[12].children[0].children[0])
 		    itemDom.children[12].children[0].children[0].style.backgroundImage = 'url("/static/img/icon7.png")'
 		    popUpBox1.style.display = 'none';
 		    popUpBox1.parentNode.style.display = 'none';
+			itemDom.children[12].children[0].children[0].onclick = ''
 		}
 		
 		function getRow(rot) {

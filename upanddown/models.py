@@ -36,7 +36,7 @@ class Interviewee(db.Document):
     education = db.StringField()
     graduated = db.StringField()
     experience = db.StringField()
-    e_level = db.StringField()
+    level = db.StringField()
     resume = db.BooleanField(default=True)
     interview = db.BooleanField(default=True)
     dept = db.StringField()

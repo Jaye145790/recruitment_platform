@@ -23,8 +23,8 @@ download_floder = os.path.join(basedir, "upload")
 
 
 def url_list(filename):
-    return "<tr style='height: 45px;'><td><input type='button' id='{}' value='❌' onclick='delete_file(event)'></td><td onclick=''>tester2</td><td>女</td><td>西華大學</td><td>物流管理</td><td>本科</td><td>2021</td><td>N/A</td><td>四級</td><td><a href='{}'><div onclick='b1_1(this)' class='b1' style='background-image: url(/static/img/icon10.png);'></div></a></td><td><a href='javascript:;'><div onclick='b2_2(this)' class='b2' style='background-image: url(/static/img/icon11.png);'></div></a></td><td><div class='name' style='display: none;'>{}</div></td><td><a href='javascript:;'><div onclick='b4_4(this)' class='b4' style='background-image: url(/static/img/icon7.png);'></div></a></div></td></tr>"\
-        .format(filename, "/download/" + filename, current_user.nickname)
+    return "<tr style='height: 45px;'><td><input type='button' id='{}' value='❌' onclick='delete_file(event)'></td><td onclick=''>{}</td><td>女</td><td>西華大學</td><td>物流管理</td><td>本科</td><td>2021</td><td>N/A</td><td>四級</td><td><a href='{}'><div onclick='b1_1(this)' class='b1' style='background-image: url(/static/img/icon10.png);'></div></a></td><td><a href='javascript:;'><div onclick='b2_2(this)' class='b2' style='background-image: url(/static/img/icon11.png);'></div></a></td><td><div class='name' style='display: none;'>{}</div></td><td><a href='javascript:;'><div onclick='b4_4(this)' class='b4' style='background-image: url(/static/img/icon7.png);'></div></a></div></td></tr>"\
+        .format(filename, Interviewee.name, "/download/" + filename, current_user.nickname)
 
 
 @loginmanager.user_loader

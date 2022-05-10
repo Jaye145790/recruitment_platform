@@ -104,6 +104,23 @@
             margin-top: 20px;
             position: relative;
         }
+		.popUp-login {
+		    position: fixed;
+		    top: 53px;
+		    right: 248px;
+			z-index: 11;
+		}
+		.popUp-login div {
+		    width: 190px;
+		    height: 58px;
+		    color: #fff;
+		    /* text-align: center; */
+		    padding-left: 10px;
+		    border: 4px solid #ccc;
+		    line-height: 58px;
+		    background: #5e5e5e;
+		
+		}
     </style>
 </head>
 <body>
@@ -114,10 +131,14 @@
             </div>
             <div class="text1">Watch Recruitment Platform</div>
             <div class="pic2">
-                <a href="#"><img src="static/img/icon4.png" alt=""></a>
+                <a href="#"><img  class="btn_icon4" src="static/img/icon4.png" alt=""></a>
             </div>
             <div class="text2">{{current_user.nickname}}</div>
         </div>
+		<div class="popUp-login" style="display: none;" onclick="closeLogin()">
+		    <a href="/forgot"><div>Change password</div></a>
+		    <a href="/logout"><div style="border-top: 0px;">Sign Out</div></a>
+		</div>
     </div>
     <div class="title2">
         <h2>Enter the information below for new candidate</h2>
@@ -138,4 +159,27 @@
 			</form>
     </div>
 </body>
+<script>
+	//获取网页元素
+		var pic1 = document.querySelector('.pic1')
+		var btn_icon4 = document.querySelector('.btn_icon4')
+		var popUpLogin = document.querySelector('.popUp-login')
+	// 刷新页面
+	pic1.onclick = function () {
+	    console.log('刷新当前页')
+	    location.reload()
+	}
+	// 显示下拉框
+	btn_icon4.onclick = function () {
+	    console.log(popUpLogin)
+	    if (popUpLogin.style.display === 'none') {
+	        popUpLogin.style.display = 'block';
+	        cover.style.display = 'block';
+	    } else {
+	        popUpLogin.style.display = 'none'
+	        cover.style.display = 'none';
+	    }
+	
+	}
+</script>
 </html>
