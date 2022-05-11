@@ -214,7 +214,7 @@
 	        <div class="pic1">
 	            <a href="#"><img src="/static/img/icon3.png" alt=""></a>
 	        </div>
-	        <div class="text1">Watch Recruit ment Platform</div>
+	        <div class="text1">Watch Recruitment Platform</div>
 	        <div class="pic2">
 	            <a href="#"><img class="btn_icon4" src="/static/img/icon4.png" alt=""></a>
 	        </div>
@@ -276,14 +276,14 @@
 		var popUpBox1 = document.querySelector('.popUp-box1')
 		var itemDom
 		
-		//简历
+		//简历  只能下载一次
 		function b1_1(rot) {
 		    itemDom = rot.parentNode.parentNode.parentNode
-			console.log(itemDom.children[9].children[0].children[0])
-		    if ( itemDom.children[9].children[0].children[0].style.backgroundImage == 'url("/static/img/icon5.png")') {
-		        itemDom.children[9].children[0].children[0].style.backgroundImage = 'url("/static/img/icon10.png")'
-		    } else if (itemDom.children[9].children[0].children[0].style.backgroundImage == 'url("/static/img/icon10.png")') {
+		    if ( itemDom.children[9].children[0].children[0].style.backgroundImage == 'url("/static/img/icon10.png")') {
 		        itemDom.children[9].children[0].children[0].style.backgroundImage = 'url("/static/img/icon5.png")'
+		    } else if (itemDom.children[9].children[0].children[0].style.backgroundImage == 'url("/static/img/icon5.png")') {
+		        //禁用该元素的超链接
+		        itemDom.children[9].children[0].onclick = function(){return false;}
 		    }
 		}
 		
@@ -294,11 +294,19 @@
 		    itemDom = rot.parentNode.parentNode.parentNode
 			
 		}
-		//录用
+		//录用  应该是先点击了面试按钮后才能让function b4_4函数生效 
 		function b4_4(rot) {
-		    itemDom = rot.parentNode.parentNode.parentNode
-		    popUpBox1.style.display = 'block';
-		    popUpBox1.parentNode.style.display = 'block';
+			itemDom = rot.parentNode.parentNode.parentNode
+		    //想到当点击b4_4函数后先判断一下面试按钮图像是否变灰且录用按钮变蓝若两个按钮符合条件才能启用录用按钮及录用按钮的弹窗
+			//下面的条件判断只判断了录用按钮是否变蓝
+			if (itemDom.children[12].children[0].children[0].style.backgroundImage == 'url("/static/img/icon9.png")'){
+				popUpBox1.style.display = 'block';
+				popUpBox1.parentNode.style.display = 'block';
+			}else if(itemDom.children[12].children[0].children[0].style.backgroundImage == 'url("/static/img/icon9.png")' ){
+			//当录用按钮图标按钮变灰则禁用录用按钮的b4_4onclick事件
+				 itemDom.children[12].children[0].children[0].onclick = function(){return false;}
+			}
+		    
 		}
 		//b3是否为实现hire定时器
 		if (b3) {
@@ -364,7 +372,6 @@
 		}
 		// 面试栏点击确定 
 		function confirm() {
-		    //console.log(itemDom.children[10])
 		    itemDom.children[11].children[0].style.display = 'block'
 		    itemDom.children[10].children[0].children[0].style.backgroundImage = 'url("/static/img/icon6.png")'
 		    popUpBox.style.display = 'none';
@@ -379,11 +386,10 @@
 			//console.log(itemDom.children[9].children[0]) 可以找到b1_1外的第一层父元素
 			//禁用该元素的超链接
 			itemDom.children[9].children[0].onclick = function(){return false;}
+		}	
 			
-		}
 		// 录用栏点击确定 
 		function confirm1() {
-		    console.log(itemDom.children[12].children[0].children[0])
 		    itemDom.children[12].children[0].children[0].style.backgroundImage = 'url("/static/img/icon7.png")'
 		    popUpBox1.style.display = 'none';
 		    popUpBox1.parentNode.style.display = 'none';
