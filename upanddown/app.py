@@ -5,9 +5,7 @@ from models import *
 import os
 import json
 import random
-import sys
 
-# sys.setrecursionlimit(10000000)
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.config.from_object("config")
@@ -22,9 +20,15 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 download_floder = os.path.join(basedir, "upload")
 
 
-def url_list(filename):
-    return "<tr style='height: 45px;'><td><input type='button' id='{}' value='❌' onclick='delete_file(event)'></td><td onclick=''>{}</td><td>女</td><td>西華大學</td><td>物流管理</td><td>本科</td><td>2021</td><td>N/A</td><td>四級</td><td><a href='{}'><div onclick='b1_1(this)' class='b1' style='background-image: url(/static/img/icon10.png);'></div></a></td><td><a href='javascript:;'><div onclick='b2_2(this)' class='b2' style='background-image: url(/static/img/icon11.png);'></div></a></td><td><div class='name' style='display: none;'>{}</div></td><td><a href='javascript:;'><div onclick='b4_4(this)' class='b4' style='background-image: url(/static/img/icon7.png);'></div></a></div></td></tr>"\
-        .format(filename, Interviewee.name, "/download/" + filename, current_user.nickname)
+def url_list(filename, name, gender, school, major, education, graduated, experience, level):
+    return "<tr style='height: 45px;'><td><input type='button' id='{}' value='❌' onclick='delete_file(event)'></td>" \
+           "<td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td>" \
+           "<td>{}</td><td><a href='{}'><div onclick='b1_1(this)' class='b1' style='background-image: " \
+           "url(/static/img/icon10.png);'></div></a></td><td><a href='javascript:;'><div onclick='b2_2(this)' " \
+           "class='b2' style='background-image: url(/static/img/icon11.png);'></div></a></td><td><div class='name' " \
+           "style='display: none;'>{}</div></td><td><a href='javascript:;'><div onclick='b4_4(this)' class='b4' " \
+           "style='background-image: url(/static/img/icon7.png);'></div></a></div></td></tr>"\
+        .format(filename, name, gender, school, major, education, graduated, experience, level, "/download/" + filename, current_user.nickname)
 
 
 @loginmanager.user_loader
@@ -184,7 +188,15 @@ def get_list():
     if not os.path.exists(os.path.join(download_floder, current_user.floder)):
         os.mkdir(os.path.join(download_floder, current_user.floder))
     file_list = os.listdir(os.path.join(download_floder, current_user.floder))
-    return jsonify(list(map(url_list, file_list)))
+    name = [n.name for n in Interviewee.objects()]
+    gender = [n.gender for n in Interviewee.objects()]
+    school = [n.school for n in Interviewee.objects()]
+    major = [n.major for n in Interviewee.objects()]
+    education = [n.education for n in Interviewee.objects()]
+    graduated = [n.graduated for n in Interviewee.objects()]
+    experience = [n.experience for n in Interviewee.objects()]
+    level = [n.level for n in Interviewee.objects()]
+    return jsonify(list(map(url_list, file_list, name, gender, school, major, education, graduated, experience, level)))
 
 
 @app.route("/download/<string:filename>")
@@ -200,6 +212,8 @@ def download(filename):
 def delete_file(filename):
     if os.path.isfile(os.path.join(download_floder, current_user.floder, filename)):
         os.remove(os.path.join(download_floder, current_user.floder, filename))
+        for n in Interviewee.objects():
+            n.delete()
         return jsonify({
             "result": "OK"
         })
@@ -213,5 +227,5 @@ def delete_file(filename):
 if __name__ == '__main__':
     if not os.path.exists(download_floder):
         os.makedirs(download_floder)
-    app.run(host='0.0.0.0', port=5223, debug=True)
+    app.run(host='127.0.0.1', port=5000, debug=True)
 
