@@ -282,16 +282,24 @@
 		    if ( itemDom.children[9].children[0].children[0].style.backgroundImage == 'url("/static/img/icon10.png")') {
 		        itemDom.children[9].children[0].children[0].style.backgroundImage = 'url("/static/img/icon5.png")'
 		    } else if (itemDom.children[9].children[0].children[0].style.backgroundImage == 'url("/static/img/icon5.png")') {
-		        //禁用该元素的超链接
+				//移除简历按键b1_1的下载功能  注意b1_1简历的下载功能函数在链接a标签上即为b1盒子外第一层父元素 
+				//console.log(itemDom.children[9].children[0]) 可以找到b1_1外的第一层父元素
+				//禁用该元素的超链接
 		        itemDom.children[9].children[0].onclick = function(){return false;}
 		    }
 		}
 		
 		//面试  b2_2(rot)是一个绑定面试点击事件
 		function b2_2(rot) {
-		    popUpBox.style.display = 'block';
-		    popUpBox.parentNode.style.display = 'block';
 		    itemDom = rot.parentNode.parentNode.parentNode
+			if(itemDom.children[10].children[0].children[0].style.backgroundImage == 'url("/static/img/icon11.png")'){
+				popUpBox.style.display = 'block';
+				popUpBox.parentNode.style.display = 'block';
+				//此处在进入到confirm()函数中处理了面试按钮图片的切换功能 实现了由图11变成图6
+			}else if(itemDom.children[10].children[0].children[0].style.backgroundImage == 'url("/static/img/icon6.png")' ){
+				itemDom.children[10].children[0].children[0].onclick = function(){return false;}
+			}
+			
 			
 		}
 		//录用  应该是先点击了面试按钮后才能让function b4_4函数生效 
@@ -302,13 +310,13 @@
 			if (itemDom.children[12].children[0].children[0].style.backgroundImage == 'url("/static/img/icon9.png")'){
 				popUpBox1.style.display = 'block';
 				popUpBox1.parentNode.style.display = 'block';
-			}else if(itemDom.children[12].children[0].children[0].style.backgroundImage == 'url("/static/img/icon9.png")' ){
-			//当录用按钮图标按钮变灰则禁用录用按钮的b4_4onclick事件
+			}else if(itemDom.children[12].children[0].children[0].style.backgroundImage == 'url("/static/img/icon7.png")' ){
+			//当录用按钮图标按钮变灰则禁用录用按钮的b4_4onclick事件  js对象禁用onclick
 				 itemDom.children[12].children[0].children[0].onclick = function(){return false;}
 			}
 		    
 		}
-		//b3是否为实现hire定时器
+		//b3
 		if (b3) {
 		    b3.onclick = function () {
 		        if (this.style.backgroundImage == 'url("/static/img/icon7.png")') {
@@ -349,14 +357,14 @@
 		}
 		// 关闭popUp弹出框
 		function closePop() {
-		    console.log('关闭')
+		    console.log('关闭pop')
 		    popUpBox.style.display = 'none';
 		    popUpBox.parentNode.style.display = 'none';
 		    // b2.style.backgroundImage = 'url("img/icon6.png")'
 		}
 		// 关闭Hire
 		function closePop1() {
-		    console.log('关闭')
+		    console.log('关闭pop1')
 		    popUpBox1.style.display = 'none';
 		    popUpBox1.parentNode.style.display = 'none';
 		    // b4.style.backgroundImage = 'url("/static/img/icon7.png")'
@@ -370,6 +378,37 @@
 		    popUpLogin.style.display = 'none'
 		    cover.style.display = 'none';
 		}
+		
+		//设置一个初始的事件值10s 用于b4_4录用按钮倒计时功能
+		var time = 10
+		//hireDJS()函数来进行hire按钮倒计时判断 当time==0则表示当前按钮倒计时完毕，需要将按钮恢复，并且重新赋值  若time!=0则表示当前正在倒计时，按钮禁用，并且时间time-1
+		function hireDJS() {
+		  if(time == 0){
+			  //10s倒计时结束，则hire按钮被禁用
+			  //itemDom.children[12].children[0].children[0].onclick = function(){return false;}
+			  //先将js对象转化成jquery对象 再用jquery中禁用按钮的方法
+			  $("itemDom.children[12].children[0].children[0]").removeAttr('onclick')
+			  itemDom.children[9].children[0].children[0].style.backgroundImage = 'url("/static/img/icon10.png")'
+			  itemDom.children[10].children[0].children[0].style.backgroundImage = 'url("/static/img/icon11.png")'
+			  itemDom.children[12].children[0].children[0].style.backgroundImage = 'url("/static/img/icon7.png")'
+			  itemDom.children[11].children[0].style.display = 'none' // hide username
+			  time = 10
+			  //清除定时器
+			  return false
+		}else if(itemDom.children[12].children[0].children[0].style.backgroundImage == 'url("/static/img/icon7.png")'){
+				$("itemDom.children[12].children[0].children[0]").removeAttr('onclick')
+				time = 10
+				//清除定时器
+				return false
+			}else {
+				time = time - 1
+			}
+		  //设置一个定时器
+		    setTimeout(function() {
+				  hireDJS()
+			  }, 1000)
+		}
+		
 		// 面试栏点击确定 
 		function confirm() {
 		    itemDom.children[11].children[0].style.display = 'block'
@@ -378,14 +417,10 @@
 		    popUpBox.parentNode.style.display = 'none';
 		    itemDom.children[9].children[0].children[0].style.backgroundImage = 'url("/static/img/icon5.png")'
 		    itemDom.children[12].children[0].children[0].style.backgroundImage = 'url("/static/img/icon9.png")'
-			//console.log(itemDom.children[10].children[0].children[0])
-			//思维一由于onclick是一个重复点击事件，想到在第一次点击后移除该点击事件
-			itemDom.children[10].children[0].children[0].onclick = ''
-			//console.log(itemDom.children[9].children[0].children[0])
-			//移除简历按键b1_1的下载功能  注意b1_1简历的下载功能函数在链接a标签上即为b1盒子外第一层父元素
-			//console.log(itemDom.children[9].children[0]) 可以找到b1_1外的第一层父元素
-			//禁用该元素的超链接
-			itemDom.children[9].children[0].onclick = function(){return false;}
+			$("itemDom.children[12].children[0].children[0]").attr('onclick')
+	        //在confirm()内部调用hireDJS()函数
+			 hireDJS()
+			
 		}	
 			
 		// 录用栏点击确定 
@@ -393,7 +428,7 @@
 		    itemDom.children[12].children[0].children[0].style.backgroundImage = 'url("/static/img/icon7.png")'
 		    popUpBox1.style.display = 'none';
 		    popUpBox1.parentNode.style.display = 'none';
-			itemDom.children[12].children[0].children[0].onclick = ''
+			
 		}
 		
 		function getRow(rot) {
