@@ -39,10 +39,14 @@
 				position: relative;
 	        }
 	        .title{
-	            width: 1200px;
+	        /* width: 1200px; 不应该写死*/
+			/*  注意width: 100% 设置的是title盒子的宽度 但我想要的应该是设置title盒子中放置的图片bg1的百分比宽度 */
+			    width: 100% ;
 	            height: 57px;
+				/* 新增 */
+				position: relative;
 	            background: url(/static/img/bg1.png) no-repeat;
-	            background-size:cover ;
+	            background-size: 100% 100%;
 	            margin: 0 auto;
 	        }
 	        .pic1{
@@ -50,6 +54,8 @@
 	            margin-left: 5px;
 	        }
 	        .text1{
+				/* 新增position */
+				position: relative;
 	            float: left;
 	            line-height: 57px;
 	            font-weight: 700;
@@ -59,16 +65,22 @@
 	            margin-left: 10px;
 	        }
 	        .pic2{
-	            float: left;
-	            margin: 8px 0 8px 600px;
+				/* 新增position  left:50%  注释了margin*/
+				position: absolute;
+				left: 73%;
+	           /* float: left; */
+	           margin: 8px 0 8px 60px;
 	        }
 	        .text2{
-	            float: left;
+				/* 新增position   left:41%*/
+				position: absolute;
+				left: 73%;
+	            /*  float: left; */
 	            font-size: 14px;
 	            line-height: 57px;
 	            font-family: Arial, Helvetica, sans-serif;
 	            color: #fff;
-	            margin-left: 10px;
+	            margin-left: 110px;
 	        }
 	        .btns{
 	            float: right;
@@ -121,11 +133,14 @@
 			    transition: all .3s;
 			}
 	        .popUp-login {
-	            position: fixed;
+	            position: absolute;
 	            top: 53px;
-	            right: 248px;
+			    left:70%
 				z-index: 11;
 	        }
+			.pic2 .popUp-login{
+				z-index: 11;
+			} 
 	        .cover {
 	            position: fixed;
 	            width: 100%;
@@ -218,6 +233,10 @@
 	        <div class="text1">Watch Recruitment Platform</div>
 	        <div class="pic2">
 	            <a href="#"><img class="btn_icon4" src="/static/img/icon4.png" alt=""></a>
+				<div class="popUp-login" style="display: none;" onclick="closeLogin()">
+				    <a href="/forgot"><div>Change password</div></a>
+				    <a href="/logout"><div style="border-top: 0px;">Sign Out</div></a>
+				</div>
 	        </div>
 	        <div class="text2">{{current_user.nickname}}</div>
 	    </div>
@@ -230,10 +249,10 @@
 			</form>
 	    </div>
 	
-	    <div class="popUp-login" style="display: none;" onclick="closeLogin()">
+	   <!-- <div class="popUp-login" style="display: none;" onclick="closeLogin()">
 	        <a href="/forgot"><div>Change password</div></a>
 	        <a href="/logout"><div style="border-top: 0px;">Sign Out</div></a>
-	    </div>
+	    </div> -->
 	</div>
 	</div>
 	<table >
@@ -367,7 +386,7 @@
 		function closePop1() {
 		    console.log('关闭pop1')
 		    popUpBox1.style.display = 'none';
-		    popUpBox1.parentNode.style.display = 'none'; 
+		    popUpBox1.parentNode.style.display = 'none';
 		    // b4.style.backgroundImage = 'url("/static/img/icon7.png")'
 			itemDom.children[9].children[0].children[0].style.backgroundImage = 'url("/static/img/icon10.png")'			
 			itemDom.children[10].children[0].children[0].style.backgroundImage = 'url("/static/img/icon11.png")'

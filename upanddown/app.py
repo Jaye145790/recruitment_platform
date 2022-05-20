@@ -28,7 +28,8 @@ def url_list(filename, name, gender, school, major, education, graduated, experi
            "class='b2' style='background-image: url(/static/img/icon11.png);'></div></a></td><td><div class='name' " \
            "style='display: none;'>{}</div></td><td><a href='javascript:;'><div onclick='b4_4(this)' class='b4' " \
            "style='background-image: url(/static/img/icon7.png);'></div></a></div></td></tr>"\
-        .format(filename, name, gender, school, major, education, graduated, experience, level, "/download/" + filename, current_user.nickname)
+        .format(filename, name, gender, school, major, education, graduated,
+                experience, level, "/download/" + filename, current_user.nickname)
 
 
 @loginmanager.user_loader
@@ -196,7 +197,10 @@ def get_list():
     graduated = [n.graduated for n in Interviewee.objects()]
     experience = [n.experience for n in Interviewee.objects()]
     level = [n.level for n in Interviewee.objects()]
-    return jsonify(list(map(url_list, file_list, name, gender, school, major, education, graduated, experience, level)))
+    list_map = list(map(url_list, file_list, name, gender, school, major,
+                        education, graduated, experience, level))
+    list_map.sort()
+    return jsonify(list_map)
 
 
 @app.route("/download/<string:filename>")
@@ -213,7 +217,8 @@ def delete_file(filename):
     if os.path.isfile(os.path.join(download_floder, current_user.floder, filename)):
         os.remove(os.path.join(download_floder, current_user.floder, filename))
         for n in Interviewee.objects():
-            n.delete()
+            if n['name'] == filename.rstrip('.pdf'):
+                n.delete()
         return jsonify({
             "result": "OK"
         })
@@ -227,5 +232,4 @@ def delete_file(filename):
 if __name__ == '__main__':
     if not os.path.exists(download_floder):
         os.makedirs(download_floder)
-    app.run(host='127.0.0.1', port=5000, debug=True)
-
+    app.run(host='0.0.0.0', port=5200, debug=True)
