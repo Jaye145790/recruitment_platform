@@ -9,15 +9,79 @@
     <link rel="stylesheet" type="text/css" href="/static/css/toastr.min.css" />
     <script src="/static/js/toastr.min.js"></script>
     <title>注册</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		a{
+			text-decoration: none;
+		}
+		.title1{
+			/* width: 1200px; */
+			width: 90%;
+			margin: 10px auto 0;
+			border-bottom: 2px solid #71b0bf;
+		}
+		.title h1{
+			font: 24px '微软雅黑';
+			padding-bottom: 4px;
+		}
+		.title2{
+			/*  width: 1200px; */
+			  width: 100%;
+			  margin: 100px auto 0;
+			 text-align: center;
+		}
+		.title2 h2{
+			font-size: 22px;
+			line-height: 2;
+		}
+		.title2 label{
+			color: #4285f4;
+		}
+		/* 相邻兄弟选择器 */
+		.title2 label+input{
+			width: 240px;
+			height: 34px;
+			margin: 20px auto 0;
+			padding-left: 10px;
+			border-radius: 10px;
+			border: 1px solid #afafaf;
+		}
+		.title2 #register{
+			margin-top: 20px;
+			margin-bottom: 20px;
+			width: 60px;
+			color: #fff;
+			background-color:#4285f4 ;
+			border: 1px solid #afafaf;
+		}
+		form{
+			margin-top: 20px;
+		}
+	</style>
 </head>
 
 <body>
-    <label>用户名：</label><input type="text" id="nickname"><br>
-    <label>账 号：</label><input type="text" id="username"><br>
-    <label>密 码：</label><input type="password" id="password"><br>
-    <input type="button" value="注册" onclick="register()"><br>
-    <a href="/login">登录</a>
-
+	<div class="title1">
+		 <h1>Watch Recruitment Platform</h1>
+	</div>
+	<div class="title2">
+		<h2>Enter the information below to register your <br>
+		Username
+		</h2>
+		<form action="#">
+		   <label>用户名：</label><input type="text" id="nickname"><br>
+		   <label>账&emsp;号：</label><input type="text" id="username"><br>
+		   <label>密&emsp;码：</label><input type="password" id="password"><br>
+		   <input  id="register" type="button" value="注册" onclick="register()"><br>
+		   <a href="/login">登录</a>			
+		</form>
+	</div>
+    
+     
     <script>
         function register() {
             var formdata = {

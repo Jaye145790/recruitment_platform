@@ -18,16 +18,19 @@
             text-decoration: none;
         }
         .box{
-            width: 1200px;
+           /* width: 1200px; */
+		    width: 100%;
             margin: 0 auto;
             height: 60px;
         }
         .title1{
-            width: 1200px;
+           /* width: 1200px; */
+		    width: 100%;
             height: 57px;
             background: url(static/img/bg1.png) no-repeat;
             background-size:cover ;
             margin: 0 auto;
+			position: relative;
         }
         .pic1{
             float: left;
@@ -43,19 +46,27 @@
             margin-left: 10px;
         }
         .pic2{
-            float: left;
-            margin: 8px 0 8px 600px;
+			position: absolute;
+           /* float: left; */
+			left: 73%;
+            margin: 8px 0 8px 60px; 
         }
+		.pic2 .popUp-login{
+			z-index: 11;
+		}
         .text2{
-            float: left;
+           /* float: left; */
+		    position: absolute;
+			left: 73%;
             font-size: 14px;
             line-height: 57px;
             font-family: Arial, Helvetica, sans-serif;
             color: #fff;
-            margin-left: 10px;
+            margin-left: 110px;
         }
         .title2{
-            width: 1200px;
+            /* width: 1200px; */
+			width: 90%;
             margin: 10px auto 0;
             text-align: center;
         }
@@ -95,17 +106,19 @@
             width: 100px;
         }
         .title2 button.b2{
-            top: 160px;
-            left: 780px;
+			position: absolute;
+            top: 47%;
+            left: 60%;
             background: #afafaf;
             width: 100px;
+			margin-left: 120px;
         }
         form{
             margin-top: 20px;
             position: relative;
         }
 		.popUp-login {
-		    position: fixed;
+		   /* position: fixed; */
 		    top: 53px;
 		    right: 248px;
 			z-index: 11;
@@ -132,13 +145,19 @@
             <div class="text1">Watch Recruitment Platform</div>
             <div class="pic2">
                 <a href="#"><img  class="btn_icon4" src="static/img/icon4.png" alt=""></a>
+				<div class="popUp-login" style="display: none;" onclick="closeLogin()">
+				    <a href="/forgot"><div>Change password</div></a>
+				    <a href="/logout"><div style="border-top: 0px;">Sign Out</div></a>
+				</div>
             </div>
             <div class="text2">{{current_user.nickname}}</div>
         </div>
-		<div class="popUp-login" style="display: none;" onclick="closeLogin()">
+		
+		<!-- <div class="popUp-login" style="display: none;" onclick="closeLogin()">
 		    <a href="/forgot"><div>Change password</div></a>
 		    <a href="/logout"><div style="border-top: 0px;">Sign Out</div></a>
-		</div>
+		</div> -->
+		
     </div>
     <div class="title2">
         <h2>Enter the information below for new candidate</h2>
