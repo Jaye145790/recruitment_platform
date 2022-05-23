@@ -19,7 +19,7 @@
 		    width: 90%;
             height: 591px; 
             margin: 0 auto;
-            background: url(static/img/login_bg2.png) no-repeat;
+            background: url(static/img/bg2.jpeg) no-repeat;
             background-size: 100% 100%;
             position: relative;
         }
@@ -71,6 +71,16 @@
 		    border-radius: 10px;
 		    border: 1px solid #afafaf;
 		}
+		.title2 input::-webkit-input-placeholder{
+			color: #00a1ff;
+			font-size: 15px;
+			font-weight: 400;
+		}
+		.title2 input::-moz-placeholder{
+			color: #00a1ff;
+			font-size: 15px;
+			font-weight: 400;
+		}
 		.btns{
 		    float: center;
 		}
@@ -91,6 +101,15 @@
 		    font-size: 12px;
 		    display: block;
 		}
+		/* 选中disabled下的input */
+		#login_btn:disabled{
+			 /* color是修改字体颜色 */
+			color: #aca899;
+			background-color: #f5f5f5;
+			opacity: 0.8;
+			font-size: 16px;
+		}
+		/* 当disabked为false，login_btn被启用后修改样式 */
     </style>
 </head>
 
@@ -104,9 +123,9 @@
 	
 	<div class="title2">
 		<h4>Enter username and password to get started</h4>
-		<input type="text" id="username"><br>
-		<input type="password" id="password"><br>
-		<input type="button" value="continue" onclick="login()">
+		<input type="text" id="username"  class="input_on" name="username" autocomplete="on" placeholder="username" onfocus="this.placeholder=''" onblur="this.placeholder='username'"><br>
+		<input type="password" id="password" class="input_on" name="password" placeholder="password" onfocus="this.placeholder=''" onblur="this.placeholder='password'"><br>
+		<input type="button" id="login_btn" value="continue" onclick="login()" disabled>
 			<!-- <form action="#">
 			    <input type="text" id="Username">
 				<input type="text" id="Password">
@@ -116,6 +135,26 @@
 			</div> -->
 	</div>
     <script>
+		//formData：包含控制按钮是否可用的字段
+		var formData = {
+			"username": $("#username").val(),
+			"password": $("#password").val(),
+		}
+		var username_value = formData[0]
+		var password_value = formData[1]
+		
+		// input事件:输入框变化时，判断是否需要改变提交的可用与否状态
+		$(".input_on").change('input',function(){
+			    var v1 = document.getElementById("username").value
+				var v2 = document.getElementById("password").value
+				if( v1 != "" && v2 != "" ){
+					$("#login_btn").attr("disabled",false)
+				}else{
+					$("#login_btn").attr("disabled",true)
+				}	
+			
+		})
+		
         function login() {
             var formdata = {
                 "username": $("#username").val(),
@@ -139,6 +178,7 @@
                     toastr["error"]("网络连接失败");
                 }
             })
+			
         }
 
         function next_url(url) {
