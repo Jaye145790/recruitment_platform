@@ -144,13 +144,18 @@
 		var password_value = formData[1]
 		
 		// input事件:输入框变化时，判断是否需要改变提交的可用与否状态
-		$(".input_on").change('input',function(){
+		//用$().on()好一些即可以监听每一次当有数字变换事件  而$().change()则是input失去焦点后才处理
+		$(".input_on").on('input',function(){
 			    var v1 = document.getElementById("username").value
 				var v2 = document.getElementById("password").value
 				if( v1 != "" && v2 != "" ){
 					$("#login_btn").attr("disabled",false)
+					$("#login_btn").css("background-color","skyblue")
+					$("#login_btn").css({"font-size":"16px","font-weight":"400"})
 				}else{
 					$("#login_btn").attr("disabled",true)
+					$("#login_btn").css("background-color","#f5f5f5")
+					
 				}	
 			
 		})

@@ -50,6 +50,7 @@
            /* float: left; */
 			left: 73%;
             margin: 8px 0 8px 60px; 
+			z-index: 11;
         }
 		.pic2 .popUp-login{
 			z-index: 11;
@@ -121,7 +122,6 @@
 		   /* position: fixed; */
 		    top: 53px;
 		    right: 248px;
-			z-index: 11;
 		}
 		.popUp-login div {
 		    width: 190px;
@@ -132,11 +132,18 @@
 		    border: 4px solid #ccc;
 		    line-height: 58px;
 		    background: #5e5e5e;
-		
+		}
+		.cover {
+		    position: fixed;
+		    width: 100%;
+		    height: 100%;
+		    background: rgba(46, 46, 46, .7);
+		    z-index: 10;
 		}
     </style>
 </head>
 <body>
+	<div id="cover" class="cover" style="display: none;"></div>
     <div class="box">
         <div class="title1">
             <div class="pic1">
@@ -183,6 +190,9 @@
 		var pic1 = document.querySelector('.pic1')
 		var btn_icon4 = document.querySelector('.btn_icon4')
 		var popUpLogin = document.querySelector('.popUp-login')
+		// 为啥此处用getelementbyid获取cover 就会出错 报错cannot read property style 而用querySelector不会出错
+		//querySelector仅仅返回匹配指定选择器的第一个元素
+		var cover = document.querySelector('.cover')
 	// 刷新页面
 	pic1.onclick = function () {
 	    console.log('刷新当前页')
@@ -196,9 +206,14 @@
 	        cover.style.display = 'block';
 	    } else {
 	        popUpLogin.style.display = 'none'
-	        cover.style.display = 'none';
+	         cover.style.display = 'none';
 	    }
 	
+	}
+	//点击cover盒子 隐藏下拉框
+	 cover.onclick = function(){
+	     popUpLogin.style.display = 'none'
+	    cover.style.display = 'none';
 	}
 </script>
 </html>
