@@ -22,8 +22,8 @@ download_floder = os.path.join(basedir, "upload")
 
 def url_list(filename, name, gender, school, major, education, graduated, experience, level):
     return "<tr style='height: 45px;'><td><input type='button' id='{}' value='❌' onclick='delete_file(event)'></td>" \
-           "<td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td>" \
-           "<td>{}</td><td><a href='{}'><div onclick='b1_1(this)' class='b1' style='background-image: " \
+           "<td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td>" \
+           "<td><a href='{}'><div onclick='b1_1(this)' class='b1' style='background-image: " \
            "url(/static/img/icon10.png);'></div></a></td><td><a href='javascript:;'><div onclick='b2_2(this)' " \
            "class='b2' style='background-image: url(/static/img/icon11.png);'></div></a></td><td><div class='name' " \
            "style='display: none;'>{}</div></td><td><a href='javascript:;'><div onclick='b4_4(this)' class='b4' " \
@@ -216,6 +216,7 @@ def download(filename):
 def delete_file(filename):
     if os.path.isfile(os.path.join(download_floder, current_user.floder, filename)):
         os.remove(os.path.join(download_floder, current_user.floder, filename))
+        print('deleted:', filename)
         for n in Interviewee.objects():
             if n['name'] == filename.rstrip('.pdf'):
                 n.delete()
