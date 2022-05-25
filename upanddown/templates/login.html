@@ -144,7 +144,7 @@
 		var password_value = formData[1]
 		
 		// input事件:输入框变化时，判断是否需要改变提交的可用与否状态
-		$(".input_on").change('input',function(){
+		$(".input_on").on('input',function(){
 			    var v1 = document.getElementById("username").value
 				var v2 = document.getElementById("password").value
 				if( v1 != "" && v2 != "" ){
