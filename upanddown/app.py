@@ -5,7 +5,7 @@ from models import *
 import os
 import json
 import random
-
+from pathlib import Path
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.config.from_object("config")
@@ -179,16 +179,19 @@ def upload_btn():
     if not os.path.exists(os.path.join(download_floder, current_user.floder)):
         os.mkdir(os.path.join(download_floder, current_user.floder))
     f.save(os.path.join(download_floder, current_user.floder, f.filename))
-    print(os.path.join(download_floder, current_user.floder, f.filename))
     return "上传成功"
 
 
 @app.route("/get_list", methods=["GET"])
 @login_required
 def get_list():
-    if not os.path.exists(os.path.join(download_floder, current_user.floder)):
-        os.mkdir(os.path.join(download_floder, current_user.floder))
-    file_list = os.listdir(os.path.join(download_floder, current_user.floder))
+    file_path = os.path.join(download_floder, current_user.floder)
+    if not os.path.exists(file_path):
+        os.mkdir(file_path)
+    # join拼接
+    file_list = os.listdir(file_path)
+    paths = sorted(Path(file_list).iterdir())
+    print(paths)
     name = [n.name for n in Interviewee.objects()]
     gender = [n.gender for n in Interviewee.objects()]
     school = [n.school for n in Interviewee.objects()]
@@ -197,10 +200,8 @@ def get_list():
     graduated = [n.graduated for n in Interviewee.objects()]
     experience = [n.experience for n in Interviewee.objects()]
     level = [n.level for n in Interviewee.objects()]
-    list_map = list(map(url_list, file_list, name, gender, school, major,
-                        education, graduated, experience, level))
-    list_map.sort()
-    return jsonify(list_map)
+    return jsonify(list(map(url_list, file_list, name, gender, school, major,
+                            education, graduated, experience, level)))
 
 
 @app.route("/download/<string:filename>")
