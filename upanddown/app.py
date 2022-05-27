@@ -190,7 +190,7 @@ def get_list():
         os.mkdir(file_path)
     # join拼接
     file_list = os.listdir(file_path)
-    paths = sorted(Path(file_list).iterdir())
+    paths = sorted(file_list, key=lambda x: os.path.getmtime(os.path.join(file_path, x)), reverse=True)
     print(paths)
     name = [n.name for n in Interviewee.objects()]
     gender = [n.gender for n in Interviewee.objects()]
