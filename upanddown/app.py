@@ -188,6 +188,7 @@ def upload_btn():
 def get_list():
     if not os.path.exists(os.path.join(download_floder, current_user.floder)):
         os.mkdir(os.path.join(download_floder, current_user.floder))
+    #join拼接
     file_list = os.listdir(os.path.join(download_floder, current_user.floder))
     name = [n.name for n in Interviewee.objects()]
     gender = [n.gender for n in Interviewee.objects()]
