@@ -16,7 +16,7 @@
         }
         .box1{
           /*  width: 1200px; */
-		    width: 90%;
+		    width: 100%;
             height: 591px; 
             margin: 0 auto;
             background: url(static/img/bg2.jpeg) no-repeat;
@@ -71,16 +71,24 @@
 		    border-radius: 10px;
 		    border: 1px solid #afafaf;
 		}
+		.title2 input:focus{
+			background: #f0ecec;
+			border: 1px solid #00a1ff;
+			outline: none;
+			/* border-style: solid; */
+			/* border-color: #00a1ff; */
+			/* border: solid #00a1ff;是border-style border-color的简写 */
+		}
 		.title2 input::-webkit-input-placeholder{
 			color: #00a1ff;
 			font-size: 15px;
 			font-weight: 400;
-		}
+		} 
 		.title2 input::-moz-placeholder{
 			color: #00a1ff;
 			font-size: 15px;
 			font-weight: 400;
-		}
+		} 
 		.btns{
 		    float: center;
 		}
@@ -109,7 +117,24 @@
 			opacity: 0.8;
 			font-size: 16px;
 		}
-		/* 当disabked为false，login_btn被启用后修改样式 */
+		.pwd_div{
+			display: block;
+			position: relative;
+			width: 251px;
+			height: 34px;
+			/* 不加边距会引起盒子塌陷 */
+			margin: 30px auto 0;
+			outline: none;
+		    border-radius: 10px;
+		}
+		#pwd_img{
+			position:absolute;
+			left:85%;
+			top:25%;
+		}
+		a:hover{
+			text-decoration:underline;
+		}
     </style>
 </head>
 
@@ -123,9 +148,14 @@
 	
 	<div class="title2">
 		<h4>Enter username and password to get started</h4>
-		<input type="text" id="username"  class="input_on" name="username" autocomplete="on" placeholder="username" onfocus="this.placeholder=''" onblur="this.placeholder='username'"><br>
-		<input type="password" id="password" class="input_on" name="password" placeholder="password" onfocus="this.placeholder=''" onblur="this.placeholder='password'"><br>
-		<input type="button" id="login_btn" value="continue" onclick="login()" disabled>
+		<input type="text" id="username"  class="input_on" name="username"  placeholder="username" onfocus="this.placeholder=''" onblur="this.placeholder='username'"><br>
+		<div class="pwd_div">
+		<input type="password" id="password" class="input_on" name="password" placeholder="password" onfocus="this.placeholder=''" onblur="this.placeholder='password'">
+		<img id="pwd_img" src="static/img/eye_close.gif" title="显示/隐藏密码" alt="图片加载失败">
+		</div>
+		<br>
+		<input type="button" id="login_btn" value="continue" onclick="login()" disabled><br>
+		<a href="/forgot">忘记密码</a><br>
 			<!-- <form action="#">
 			    <input type="text" id="Username">
 				<input type="text" id="Password">
@@ -142,9 +172,8 @@
 		}
 		var username_value = formData[0]
 		var password_value = formData[1]
-		
 		// input事件:输入框变化时，判断是否需要改变提交的可用与否状态
-		//用$().on()好一些即可以监听每一次当有数字变换事件  而$().change()则是input失去焦点后才处理
+		// 用$().on()好一些即可以监听每一次当有数字变换事件  而$().change()则是input失去焦点后才处理
 		$(".input_on").on('input',function(){
 			    var v1 = document.getElementById("username").value
 				var v2 = document.getElementById("password").value
@@ -154,11 +183,50 @@
 					$("#login_btn").css({"font-size":"16px","font-weight":"400"})
 				}else{
 					$("#login_btn").attr("disabled",true)
-					$("#login_btn").css("background-color","#f5f5f5")
-					
+					$("#login_btn").css("background-color","#f5f5f5")	
 				}	
 			
 		})
+		//回车键触发login登录函数
+		$(".input_on").keydown(function(e){
+			var v1 = document.getElementById("username").value
+			var v2 = document.getElementById("password").value
+			if( v1 != "" && v2 != "" && e.keyCode == 13){
+				login()
+			}
+		})
+		
+		//回车键触发焦点移到下一个input框
+		var inputs = $("input[type='text'],input[type='password']")
+		inputs.keydown(function(e){
+			var k = e.keyCode
+			 //获取当前焦点input元素的下标
+			var a = inputs.index($(this)) 
+			if( a == (inputs.length - 2 ) && k == 13 ||  a == (inputs.length - 2 ) && k == 40 ){
+					inputs[a + 1].focus()	
+			}else if( a == (inputs.length - 1) && k == 38){
+					inputs[a - 1].focus()
+				}
+		})
+		
+		// password图片按钮转换明暗文
+		var pwd = document.getElementById('password')
+		var pwdimg = document.getElementById('pwd_img');
+		var flag = 1;
+		pwdimg.onclick = function(){
+			if( flag == 1 ){
+				//jquery无法修改input的type属性  想到用原生js
+				//$('#pwd').attr('type','text')
+				pwd.type = 'text'
+				$('#pwd_img').attr('src','static/img/eye_open.gif')
+				flag = 0
+			}else{
+				//$('#pwd').attr('type','password')
+				pwd.type = 'password'
+				$('#pwd_img').attr('src','static/img/eye_close.gif')
+				flag = 1
+			}
+		}
 		
         function login() {
             var formdata = {
