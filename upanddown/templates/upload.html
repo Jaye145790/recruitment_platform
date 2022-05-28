@@ -110,14 +110,30 @@
 			position: absolute;
             top: 47%;
             left: 60%;
-            background: #afafaf;
+            background: skyblue;
             width: 100px;
 			margin-left: 120px;
         }
+		.title2 button.b2:hover{
+			border: 0px;
+			/* background: #00a1ff; */
+			background-color: #4662d9;
+			color: white;
+		}
         form{
             margin-top: 20px;
             position: relative;
         }
+		input::placeholder{
+			color: #00a1ff;
+			font-size: 14px;
+			font-weight: 400;
+		}
+		.input_on:focus{
+			background: #f0ecec;
+			border: 1px solid #00a1ff;
+			outline: none;
+		}
 		.popUp-login {
 		   /* position: fixed; */
 		    top: 53px;
@@ -169,19 +185,19 @@
     <div class="title2">
         <h2>Enter the information below for new candidate</h2>
             <form action='#'>
-                <input type="text" placeholder="姓名 Name" id="name">
-                <input type="text" placeholder="性別 Gender" id="gender">
-                <input type="text" placeholder="畢業院校 School" id="school">
-                <input type="text" placeholder="專業 Major" id="major">
-                <input type="text" placeholder="學歷 Education" id="education">
-                <input type="text" placeholder="畢業時間 Graduated" id="graduated">
-                <input type="text" placeholder="工作經驗 Experience" id="experience">
-                <input type="text" placeholder="英語 E-level" id="level">
+                <input class='input_on' type="text" placeholder="姓名 Name" onfocus="this.placeholder=''" onblur="this.placeholder='姓名 Name'" id="name">
+                <input class='input_on' type="text" placeholder="性別 Gender" onfocus="this.placeholder=''" onblur="this.placeholder='性別 Gender'" id="gender">
+                <input class='input_on' type="text" placeholder="畢業院校 School" onfocus="this.placeholder=''" onblur="this.placeholder='畢業院校 School'" id="school">
+                <input class='input_on' type="text" placeholder="專業 Major" onfocus="this.placeholder=''" onblur="this.placeholder='專業 Major'" id="major">
+                <input class='input_on' type="text" placeholder="學歷 Education" onfocus="this.placeholder=''" onblur="this.placeholder='學歷 Education'" id="education">
+                <input class='input_on' type="text" placeholder="畢業時間 Graduated" onfocus="this.placeholder=''" onblur="this.placeholder='畢業時間 Graduated'" id="graduated">
+                <input class='input_on' type="text" placeholder="工作經驗 Experience" onfocus="this.placeholder=''" onblur="this.placeholder='工作經驗 Experience'" id="experience">
+                <input class='input_on' type="text" placeholder="英語 E-level" onfocus="this.placeholder=''" onblur="this.placeholder='英語 E-level'" id="level">
                 <button class="b2"><a href="/main">Main Page</a></button>
             </form>
 			<form accept-charset="utf-8" enctype="multipart/form-data" id="uploadform">
-			    <input type="file" name="file" id="file" />
-			    <input type="button" value="Upload" onclick="interviewee();upload();" />
+			    <input class='input_on' type="file" name="file" id="file" />
+			    <input class="upload_btn"  type="button" value="Upload" onclick="interviewee();upload();"  disabled  />
 			</form>
     </div>
 </body>
@@ -191,8 +207,9 @@
 		var btn_icon4 = document.querySelector('.btn_icon4')
 		var popUpLogin = document.querySelector('.popUp-login')
 		// 为啥此处用getelementbyid获取cover 就会出错 报错cannot read property style 而用querySelector不会出错
-		//querySelector仅仅返回匹配指定选择器的第一个元素
-		var cover = document.querySelector('.cover')
+		//querySelector仅仅返回匹配指定选择器的第一个元素  var cover = document.querySelector('.cover') 也可以生效
+		var cover = document.getElementById('cover')
+		
 	// 刷新页面
 	pic1.onclick = function () {
 	    console.log('刷新当前页')
@@ -215,5 +232,66 @@
 	     popUpLogin.style.display = 'none'
 	    cover.style.display = 'none';
 	}
+	
+	//input框判空  非空才启用upload按钮  
+	        var v1 = document.getElementById('name').value
+	        var v2 = document.getElementById('gender').value
+	        var v3 = document.getElementById('school').value
+	        var v4 = document.getElementById('major').value
+	        var v5 = document.getElementById('education').value
+	        var v6 = document.getElementById('graduated').value
+	        var v7 = document.getElementById('experience').value
+	        var v8 = document.getElementById('level').value
+	        var v9 = document.getElementById('file').value
+	  $(".input_on").on('input',function(){
+			if(v1 != "" && v2 != "" && v3 != "" && v4 != "" && v5 != "" && v6 != "" && v7 != "" && v8 != "" && v9 != "" ){
+				$(".upload_btn").attr("disabled",false)
+				$(".upload_btn").css("background-color","skyblue")
+				$(".upload_btn").css({"font-size":"16px","font-weight":"400"})
+			}else {
+				$(".upload_btn").attr("disabled",true)
+				$(".upload_btn").css("background-color","#f5f5f5")		
+			}	
+			//使用上述的9个getelebyid来获取input中的value值可行 但是导致代码繁多且会使后面if判断条件复杂  因此考虑用getelementbyclassname/getelementbytagname 
+			
+			//使用classname来统一获取到页面所有的input  但是该方法的缺点是:input框中只要有数字变化就会触发for循环
+			//使用此方法有bug 如果只填写file文件框则也会触发
+			// var input_length = document.getElementsByClassName('input_on').length
+			// for(var i = 0 ; i < input_length ; i++){
+			// 	if( $('.input_on').eq(i).val().length == 0){
+			// 		$(".upload_btn").attr("disabled",true)
+			// 	    $(".upload_btn").css("background-color","#f5f5f5")	
+			// 			console.log(123456)
+			// 	}else{
+			// 		$(".upload_btn").attr("disabled",false)
+			// 		$(".upload_btn").css("background-color","skyblue")
+			// 		$(".upload_btn").css({"font-size":"16px","font-weight":"400"})
+			// 	}
+			// }
+											  	
+	})
+	//回车键触发upload按钮功能
+	     $(".input_on").keydown(function(e){
+	     	if( v1 != "" && v2 != "" && v3 != "" && v4 != "" && v5 != "" && v6 != "" && v7 != "" && v8 != "" && v9 != "" && e.keyCode == 13 ){
+	     		interviewee();
+	     		upload();
+	     	}
+	     })
+	
+	//回车键触发焦点移到下一个input框
+	var inputs = $("input[type='text'],input[type='file']")
+	inputs.keydown(function(e){
+		var k = e.keyCode
+		 //获取当前焦点input元素的下标
+		var a = inputs.index($(this)) 
+			if( a == (inputs.length - 1) && k == 40 ){
+				inputs[0].focus()
+			}else if( a < (inputs.length - 1) && a >= 0  && k == 13 || k == 40 ){
+				inputs[a+1].focus()
+			}else if( a <= (inputs.length - 1) && a > 0 && k == 38){
+				inputs[a-1].focus()
+			}
+	})
+	
 </script>
 </html>

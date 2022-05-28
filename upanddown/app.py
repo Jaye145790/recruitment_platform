@@ -66,6 +66,11 @@ def success():
     return render_template("success.html")
 
 
+@app.route("/error")
+def error():
+    return render_template("error.html")
+
+
 # 上传信息
 @app.route("/upload", methods=["POST", "GET"])
 def upload():
@@ -191,7 +196,6 @@ def get_list():
     # join拼接
     file_list = os.listdir(file_path)
     paths = sorted(file_list, key=lambda x: os.path.getmtime(os.path.join(file_path, x)), reverse=True)
-    print(paths)
     name = [n.name for n in Interviewee.objects()]
     gender = [n.gender for n in Interviewee.objects()]
     school = [n.school for n in Interviewee.objects()]
@@ -200,7 +204,7 @@ def get_list():
     graduated = [n.graduated for n in Interviewee.objects()]
     experience = [n.experience for n in Interviewee.objects()]
     level = [n.level for n in Interviewee.objects()]
-    return jsonify(list(map(url_list, file_list, name, gender, school, major,
+    return jsonify(list(map(url_list, paths, name, gender, school, major,
                             education, graduated, experience, level)))
 
 
@@ -234,4 +238,4 @@ def delete_file(filename):
 if __name__ == '__main__':
     if not os.path.exists(download_floder):
         os.makedirs(download_floder)
-    app.run(host='0.0.0.0', port=5100, debug=True)
+    app.run(host='0.0.0.0', port=5200, debug=True)

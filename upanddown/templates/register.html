@@ -41,25 +41,52 @@
 		.title2 label{
 			color: #4285f4;
 		}
-		/* 相邻兄弟选择器 */
-		.title2 label+input{
+		.title2 input{
 			width: 240px;
 			height: 34px;
 			margin: 20px auto 0;
 			padding-left: 10px;
+			padding-right: 10px;
 			border-radius: 10px;
 			border: 1px solid #afafaf;
 		}
+		.title2 input:focus{
+			background: #f0ecec;
+		}
 		.title2 #register{
-			margin-top: 20px;
+			margin-top: 36px;
 			margin-bottom: 20px;
-			width: 60px;
-			color: #fff;
-			background-color:#4285f4 ;
+			width: 69px;
+			height: 28px;
+			font-size: 15px;
+			color: #aca899;;
+			background-color: #f5f5f5;
 			border: 1px solid #afafaf;
+		}
+		.title2 a:hover{
+			color: darkred;
+			text-decoration: underline;
+		}
+		input[type='text',type='password']:focus{
+			background: #f0ecec;
+			border: 1px solid #00a1ff;
+			outline: none;
 		}
 		form{
 			margin-top: 20px;
+		}
+		.pwd_div{
+			    position: relative;
+			    width: 242px;
+			    display: inline-block;
+			    height: 54px;
+			    margin-top: 2px;
+		}
+		.pwd_img{
+			position: absolute;
+			display: inline-block;
+			left:85%;
+			top: 51%;
 		}
 	</style>
 </head>
@@ -73,16 +100,60 @@
 		Username
 		</h2>
 		<form action="#">
-		   <label>用户名：</label><input type="text" id="nickname"><br>
-		   <label>账&emsp;号：</label><input type="text" id="username"><br>
-		   <label>密&emsp;码：</label><input type="password" id="password"><br>
-		   <input  id="register" type="button" value="注册" onclick="register()"><br>
-		   <a href="/login">登录</a>			
+		   <label>用户名：</label><input type="text" id="nickname" class="input_on" ><br>
+		   <label>账&emsp;号：</label><input type="text" id="username" class="input_on" ><br>
+		
+		   <label>密&emsp;码：</label><div class="pwd_div"><input type="password" id="password" class="input_on" >
+			                    <img class="pwd_img" src="static/img/eye_close.gif" title="显示/隐藏密码" alt="图片加载失败">
+		                </div><br>
+		   <input  id="register" type="button" value="注册" onclick="register()" disabled><br>
+		   <a href="/login">登&emsp;录</a>			
 		</form>
 	</div>
     
      
     <script>
+		//当本页面当三个输入框全部都输入信息后，注册按钮才能被启用
+		$(".input_on").on('input',function(){
+			var v1 = document.getElementById("nickname").value
+			var v2 = document.getElementById("username").value
+			var v3 = document.getElementById("password").value
+			if( v1 != "" && v2 != "" && v3 != "" ){
+				$("#register").attr("disabled",false)
+				$("#register").css("background-color","#04f")
+				$("#register").css("color","#fff")
+				$("#register").css({"font-size":"16px","font-weight":"400"})
+			}else{  
+				$("#register").attr("disabled",true)
+				$("#register").css("background-color","#f5f5f5")	
+			}	
+		})
+		
+		//输入框焦点的上下移动
+		var inputs = $("input[type='text'],input[type='password']")
+		inputs.keydown(function(e){
+			var k = e.keyCode
+			var i = inputs.index($(this))
+			if( i <= (inputs.length - 2 ) && k == 40 || i <= (inputs.length-2 ) && k == 13 ){
+				inputs[i+1].focus()
+			}else if( i >= 1 && k == 38 ){
+				inputs[i-1].focus()
+			}
+		})
+		
+		//enter实现同注册按钮的点击功能
+		$(".input_on").keydown(function(e){
+			// 利用jquery获取元素value值
+			var v1 = $("#nickname").val()
+			var v2 = $("#username").attr("value")
+			var v3 = $("input[type='password']").val()
+			var k = e.keyCode
+			if( v1 != "" && v2 != "" && v3 != "" && k == 13 ){
+				register()
+			}
+			
+		})
+		
         function register() {
             var formdata = {
                 "username": $("#username").val(),

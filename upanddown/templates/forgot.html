@@ -59,9 +59,39 @@
             display: block;
             padding: 0 24px;
         }
+		/* .title2 input[type="text"]:focus{
+			background: #f0ecec;
+			border: 1px solid #00a1ff;
+			outline: none;
+		} */
+		/* .title2 input[type="email"]:focus{
+			background: #f0ecec;
+			border: 1px solid #00a1ff;
+			outline: none;
+		} */
+	    /* 用逗号同时选中text与email 而不用像上面那样分开写 */
+		.title2 input[type="text"]:focus,input[type="email"]:focus{
+			background: #f0ecec;
+			border: 1px solid #00a1ff;
+			outline: none;
+		}
+		.title2 input::placeholder{
+			color: #9edbff;
+			font-size: 15px;
+			font-weight: 400;
+		}
         form{
             margin-top: 20px;
         }
+		.title3{
+			width: 100%;
+			margin-top: 12px;
+			text-align: center;
+		}
+		.title3 a:hover{
+			color: darkred;
+			text-decoration: underline;
+		}
     </style>
 </head>
 <body>
@@ -73,11 +103,15 @@
             Username
 		</h2>
             <form action="#">
-                <input type="text" placeholder="first name">
+                <input type="text" placeholder="first name" >
                 <input type="text" placeholder="last name">
                 <input type="email" placeholder="email address">
                 <button><a href="/success">Continue</a></button>
             </form>
     </div>
+	<div class="title3">
+			<a href="/login">已回忆起密码，返回登录页面</a>
+	</div>
+
 </body>
 </html>
