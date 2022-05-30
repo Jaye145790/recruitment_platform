@@ -82,7 +82,7 @@
 			    height: 54px;
 			    margin-top: 2px;
 		}
-		.pwd_img{
+		#pwd_img{
 			position: absolute;
 			display: inline-block;
 			left:85%;
@@ -104,7 +104,7 @@
 		   <label>账&emsp;号：</label><input type="text" id="username" class="input_on" ><br>
 		
 		   <label>密&emsp;码：</label><div class="pwd_div"><input type="password" id="password" class="input_on" >
-			                    <img class="pwd_img" src="static/img/eye_close.gif" title="显示/隐藏密码" alt="图片加载失败">
+			                    <img id="pwd_img" src="static/img/eye_close.gif" title="显示/隐藏密码" alt="图片加载失败">
 		                </div><br>
 		   <input  id="register" type="button" value="注册" onclick="register()" disabled><br>
 		   <a href="/login">登&emsp;录</a>			
@@ -153,6 +153,25 @@
 			}
 			
 		})
+		
+		// password图片按钮转换明暗文
+		var pwd = document.getElementById('password')
+		var pwdimg = document.getElementById('pwd_img')
+		var flag = 1;
+		pwdimg.onclick = function(){
+			if( flag == 1 ){
+				//jquery无法修改input的type属性  想到用原生js
+				//$('#pwd').attr('type','text')
+				pwd.type = 'text'
+				$('#pwd_img').attr('src','static/img/eye_open.gif')
+				flag = 0
+			}else{
+				//$('#pwd').attr('type','password')
+				pwd.type = 'password'
+				$('#pwd_img').attr('src','static/img/eye_close.gif')
+				flag = 1
+			}
+		}
 		
         function register() {
             var formdata = {

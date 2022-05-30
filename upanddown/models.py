@@ -39,5 +39,5 @@ class Interviewee(db.Document):
     level = db.StringField()
     resume = db.BooleanField(default=True)
     interview = db.BooleanField(default=True)
-    dept = db.StringField()
+    dept = db.StringField(default="")
     hire = db.BooleanField(default=False)

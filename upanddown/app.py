@@ -6,7 +6,7 @@ import os
 import json
 import random
 from pathlib import Path
-
+from distutils.util import  strtobool
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.config.from_object("config")
 
@@ -20,16 +20,31 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 download_floder = os.path.join(basedir, "upload")
 
 
-def url_list(filename, name, gender, school, major, education, graduated, experience, level):
-    return "<tr style='height: 45px;'><td><input type='button' id='{}' value='❌' onclick='delete_file(event)'></td>" \
+# icon10是简历按钮、icon11是面试按钮、icon7是录用按钮
+def url_list(id, filename, name, gender, school, major, education, graduated, experience, level, resume, interview, hire,dept):
+    res = "<tr style='height: 45px;' id='{}'><td><input type='button' id='{}' value='❌' onclick='delete_file(event)'></td>" \
            "<td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td>" \
-           "<td><a href='{}'><div onclick='b1_1(this)' class='b1' style='background-image: " \
-           "url(/static/img/icon10.png);'></div></a></td><td><a href='javascript:;'><div onclick='b2_2(this)' " \
-           "class='b2' style='background-image: url(/static/img/icon11.png);'></div></a></td><td><div class='name' " \
-           "style='display: none;'>{}</div></td><td><a href='javascript:;'><div onclick='b4_4(this)' class='b4' " \
-           "style='background-image: url(/static/img/icon7.png);'></div></a></div></td></tr>"\
-        .format(filename, name, gender, school, major, education, graduated,
-                experience, level, "/download/" + filename, current_user.nickname)
+           "<td><a href='{}'><div onclick='b1_1(this)' name='resume' class='b1' style='background-image: " \
+           "url(/static/img/iconOne.png);'></div></a></td><td><a href='javascript:;'><div onclick='b2_2(this)' name='interview' " \
+           "class='b2' style='background-image: url(/static/img/iconTwo.png);'></div></a></td><td><div name='dept'>{}</div> " \
+           "</td><td><a href='javascript:;'><div onclick='b4_4(this)' name='hire' class='b4' " \
+           "style='background-image: url(/static/img/iconThree.png);'></div></a></div></td></tr>"\
+        .format(id, filename, name, gender, school, major, education, graduated,
+                experience, level, "/download/" + filename, dept)
+    print(resume,interview)
+    if resume:
+        res = res.replace('iconOne', 'icon10')
+    else:
+        res = res.replace('iconOne', 'icon5')
+    if interview:
+        res = res.replace('iconTwo', 'icon11')
+    else:
+        res = res.replace('iconTwo', 'icon6')
+    if hire:
+        res = res.replace('iconThree', 'icon9')
+    else:
+        res = res.replace('iconThree', 'icon7')
+    return res
 
 
 @loginmanager.user_loader
@@ -87,21 +102,19 @@ def upload():
         graduated = param.get("graduated", "")
         experience = param.get("experience", "")
         level = param.get("level", "")
-        resume = param.get("resume", "")
-        interview = param.get("interview", "")
-        hire = param.get("hire", "")
+
         if not name:
             err_msg["msg"] = "缺少姓名"
             return jsonify(err_msg)
         interviewee = Interviewee.objects(name=name)
         # 判断姓名是否重复
         if not interviewee:
+            # 最后三个字段对应三个按钮的存储信息
             interviewee = Interviewee(name=name, gender=gender, school=school,
                                       major=major, education=education,
                                       graduated=graduated,
                                       experience=experience,
-                                      level=level, resume=resume,
-                                      interview=interview, hire=hire)
+                                      level=level,)
             interviewee.save()
             return jsonify({"result": "OK"})
         else:
@@ -138,7 +151,6 @@ def register():
                         floder=str(random_floder))
             user.hash_password(password)
             os.mkdir(os.path.join(download_floder, user.floder))
-            print(os.path.join(download_floder, user.floder))
             return jsonify({"result": "OK"})
         else:
             err_msg["msg"] = "用户已经注册"
@@ -196,7 +208,9 @@ def get_list():
     # join拼接
     file_list = os.listdir(file_path)
     paths = sorted(file_list, key=lambda x: os.path.getmtime(os.path.join(file_path, x)), reverse=True)
+
     name = [n.name for n in Interviewee.objects()]
+    id = [n.id for n in Interviewee.objects()]
     gender = [n.gender for n in Interviewee.objects()]
     school = [n.school for n in Interviewee.objects()]
     major = [n.major for n in Interviewee.objects()]
@@ -204,8 +218,12 @@ def get_list():
     graduated = [n.graduated for n in Interviewee.objects()]
     experience = [n.experience for n in Interviewee.objects()]
     level = [n.level for n in Interviewee.objects()]
-    return jsonify(list(map(url_list, paths, name, gender, school, major,
-                            education, graduated, experience, level)))
+    resume = [n.resume for n in Interviewee.objects()]
+    interview = [n.interview for n in Interviewee.objects()]
+    hire = [n.hire for n in Interviewee.objects()]
+    dept = [n.dept for n in Interviewee.objects()]
+    return jsonify(list(map(url_list, id,paths, name, gender, school, major,
+                            education, graduated, experience, level,resume,interview,hire,dept)))
 
 
 @app.route("/download/<string:filename>")
@@ -214,28 +232,43 @@ def download(filename):
     if os.path.isfile(os.path.join(download_floder, current_user.floder, filename)):
         return send_from_directory(os.path.join(download_floder, current_user.floder),
                                    filename, as_attachment=True)
-
-
-@app.route("/delete/<string:filename>")
+#　更改用户信息与简历功能
+@app.route("/update_user/",methods=["POST"])
 @login_required
-def delete_file(filename):
-    if os.path.isfile(os.path.join(download_floder, current_user.floder, filename)):
-        os.remove(os.path.join(download_floder, current_user.floder, filename))
-        print('deleted:', filename)
-        for n in Interviewee.objects():
-            if n['name'] == filename.rstrip('.pdf'):
-                n.delete()
-        return jsonify({
-            "result": "OK"
-        })
-    else:
-        return jsonify({
-            "result": "NO",
-            "msg": "文件不存在"
-        })
+def update_user():
+    if request.method == 'POST':
+        data = request.form
+        print('update_user',data)
+        Interviewee.objects(id=data['user_id']).update(dept=data['dept'], resume=data['resume']=='true',interview=data['interview']=='true',hire=data['hire']=='true')
+        return 'OK'
+# 删除用户信息与简历功能
+@app.route("/delete_user/",methods=["POST"])
+@login_required
+def delete_user():
+    if request.method=='POST':
+        param = request.form
+        filename = param.get("filename", "")
+        user_id = param.get("user_id", "")
+        #删除对应用户信息
+        Interviewee.objects(id=user_id).delete()
+        #删除对应简历文件
+        if os.path.isfile(os.path.join(download_floder, current_user.floder, filename)):
+            os.remove(os.path.join(download_floder, current_user.floder, filename))
+            print('deleted:', filename)
+            for n in Interviewee.objects():
+                if n['name'] == filename.rstrip('.pdf'):
+                    n.delete()
+            return jsonify({
+                "result": "OK"
+            })
+        else:
+            return jsonify({
+                "result": "NO",
+                "msg": "文件不存在"
+            })
 
 
 if __name__ == '__main__':
     if not os.path.exists(download_floder):
         os.makedirs(download_floder)
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5200, debug=True)
