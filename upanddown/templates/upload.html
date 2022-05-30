@@ -233,17 +233,17 @@
 	    cover.style.display = 'none';
 	}
 	
-	//input框判空  非空才启用upload按钮  
-	        var v1 = document.getElementById('name').value
-	        var v2 = document.getElementById('gender').value
-	        var v3 = document.getElementById('school').value
-	        var v4 = document.getElementById('major').value
-	        var v5 = document.getElementById('education').value
-	        var v6 = document.getElementById('graduated').value
-	        var v7 = document.getElementById('experience').value
-	        var v8 = document.getElementById('level').value
-	        var v9 = document.getElementById('file').value
+	  //input框判空  非空才启用upload按钮         
 	  $(".input_on").on('input',function(){
+		  var v1 = document.getElementById('name').value
+		  var v2 = document.getElementById('gender').value
+		  var v3 = document.getElementById('school').value
+		  var v4 = document.getElementById('major').value
+		  var v5 = document.getElementById('education').value
+		  var v6 = document.getElementById('graduated').value
+		  var v7 = document.getElementById('experience').value
+		  var v8 = document.getElementById('level').value
+		  var v9 = document.getElementById('file').value
 			if(v1 != "" && v2 != "" && v3 != "" && v4 != "" && v5 != "" && v6 != "" && v7 != "" && v8 != "" && v9 != "" ){
 				$(".upload_btn").attr("disabled",false)
 				$(".upload_btn").css("background-color","skyblue")
@@ -272,6 +272,15 @@
 	})
 	//回车键触发upload按钮功能
 	     $(".input_on").keydown(function(e){
+			 var v1 = $("#name").val()
+			 var v2 = $("#gender").val()
+			 var v3 = $("#school").val()
+			 var v4 = $("#major").val()
+			 var v5 = $("#education").val()
+			 var v6 = $("#graduated").val()
+			 var v7 = $("#experience").val()
+			 var v8 = $("#level").val()
+			 var v9 = $("#file").val()
 	     	if( v1 != "" && v2 != "" && v3 != "" && v4 != "" && v5 != "" && v6 != "" && v7 != "" && v8 != "" && v9 != "" && e.keyCode == 13 ){
 	     		interviewee();
 	     		upload();
