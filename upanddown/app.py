@@ -109,7 +109,6 @@ def upload():
         interviewee = Interviewee.objects(name=name)
         # 判断姓名是否重复
         if not interviewee:
-            # 最后三个字段对应三个按钮的存储信息
             interviewee = Interviewee(name=name, gender=gender, school=school,
                                       major=major, education=education,
                                       graduated=graduated,
@@ -271,4 +270,4 @@ def delete_user():
 if __name__ == '__main__':
     if not os.path.exists(download_floder):
         os.makedirs(download_floder)
-    app.run(host='0.0.0.0', port=5200, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
