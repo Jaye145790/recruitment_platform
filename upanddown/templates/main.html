@@ -323,7 +323,7 @@
 			
 			
 		}
-		//录用  应该是先点击了面试按钮后才能让function b4_4函数生效 
+		//录用  应该是先点击了面试按钮后才能让function b4_4函数生效
 		function b4_4(rot) {
 			itemDom = rot.parentNode.parentNode.parentNode
 		    //想到当点击b4_4函数后先判断一下面试按钮图像是否变灰且录用按钮变蓝若两个按钮符合条件才能启用录用按钮及录用按钮的弹窗
@@ -350,7 +350,8 @@
 		// 刷新页面
 		pic1.onclick = function () {
 		    console.log('刷新当前页')
-		    location.reload()
+		    location.reload();
+
 		}
 		// 显示下拉框
 		btn_icon4.onclick = function () {
@@ -400,12 +401,12 @@
 		    popUpLogin.style.display = 'none'
 		    cover.style.display = 'none';
 		}
-		
+		console.log(itemDom);
 		//设置一个初始的事件值10s 用于b4_4录用按钮倒计时功能
-		var time = 20
 		//hireDJS()函数来进行hire按钮倒计时判断 当time==0则表示当前按钮倒计时完毕，需要将按钮恢复，并且重新赋值  若time!=0则表示当前正在倒计时，按钮禁用，并且时间time-1
 		function hireDJS() {
-		    console.log(time);
+            let time = itemDom.children[12].children[0].children[0].getAttribute('value');
+            console.log(time);
 		  if(time == 0){
 			  //10s倒计时结束，则hire按钮被禁用
 			  //itemDom.children[12].children[0].children[0].onclick = function(){return false;}
@@ -416,6 +417,7 @@
 			  itemDom.children[12].children[0].children[0].style.backgroundImage = 'url("/static/img/icon7.png")'
 			  itemDom.children[11].children[0].style.display = 'none' // hide username
 			  time = 20
+              update_user(itemDom)
 			  //清除定时器
 			  return false
 		}else if(itemDom.children[12].children[0].children[0].style.backgroundImage == 'url("/static/img/icon7.png")'){
@@ -424,7 +426,7 @@
 				//清除定时器
 				return false
 			}else {
-				time = time - 1
+				itemDom.children[12].children[0].children[0].setAttribute('value',time-1)
 			}
 		  //设置一个定时器
 		    setTimeout(function() {
@@ -441,9 +443,14 @@
 		    itemDom.children[9].children[0].children[0].style.backgroundImage = 'url("/static/img/icon5.png")'
 		    itemDom.children[12].children[0].children[0].style.backgroundImage = 'url("/static/img/icon9.png")'
 			$("itemDom.children[12].children[0].children[0]").attr('onclick')
+            itemDom.children[12].children[0].children[0].setAttribute('value',20);
+
             update_user(itemDom);
+            new Promise(function (resolve, reject) {
+            hireDJS()
+}).then();
 	        //在confirm()内部调用hireDJS()函数
-			 hireDJS()
+
 			
 		}	
 			
@@ -474,12 +481,11 @@
 		            ls[2].innerHTML = document.getElementById('current_user').innerText;
                     data[name] = (testStr.test(ls[1].style.backgroundImage)&testStr.test(ls[0].style.backgroundImage))?document.getElementById('current_user').innerText:"";
 		        }
-
                 else data[name] = testStr.test(one.style.backgroundImage)==false;
 
             }
-
-
+            data['thinkTime'] = ls[3].getAttribute('value');
+            console.log(data,);
             $.ajax({
                 url: "/update_user/",
                 type: "post",
