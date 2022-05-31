@@ -53,7 +53,7 @@
 		.title2 input:focus{
 			background: #f0ecec;
 		}
-		.title2 #register{
+		.title2 #register_btn{
 			margin-top: 36px;
 			margin-bottom: 20px;
 			width: 69px;
@@ -99,14 +99,15 @@
 		<h2>Enter the information below to register your <br>
 		Username
 		</h2>
+		<!-- login登录时，用户使用后两个input框信息 -->
 		<form action="#">
-		   <label>用户名：</label><input type="text" id="nickname" class="input_on" ><br>
-		   <label>账&emsp;号：</label><input type="text" id="username" class="input_on" ><br>
+		   <label>I&emsp;&emsp;D：</label><input type="text" id="nickname" class="input_on" ><br>
+		   <label>用户名：</label><input type="text" id="username" class="input_on" ><br>
 		
 		   <label>密&emsp;码：</label><div class="pwd_div"><input type="password" id="password" class="input_on" >
-			                    <img id="pwd_img" src="static/img/eye_close.gif" title="显示/隐藏密码" alt="图片加载失败">
+			                 <img id="pwd_img" src="static/img/eye_close.gif" title="显示/隐藏密码" alt="图片加载失败">
 		                </div><br>
-		   <input  id="register" type="button" value="注册" onclick="register()" disabled><br>
+		   <input  id="register_btn" type="button" value="注册" onclick="register()" disabled><br>
 		   <a href="/login">登&emsp;录</a>			
 		</form>
 	</div>
@@ -114,18 +115,18 @@
      
     <script>
 		//当本页面当三个输入框全部都输入信息后，注册按钮才能被启用
-		$(".input_on").on('input',function(){
+		 $(".input_on").on('input',function(){
 			var v1 = document.getElementById("nickname").value
 			var v2 = document.getElementById("username").value
 			var v3 = document.getElementById("password").value
 			if( v1 != "" && v2 != "" && v3 != "" ){
-				$("#register").attr("disabled",false)
-				$("#register").css("background-color","#04f")
-				$("#register").css("color","#fff")
-				$("#register").css({"font-size":"16px","font-weight":"400"})
+				$("#register_btn").attr("disabled",false)
+				$("#register_btn").css("background-color","#04f")
+				$("#register_btn").css("color","#fff")
+				$("#register_btn").css({"font-size":"16px","font-weight":"400"})
 			}else{  
-				$("#register").attr("disabled",true)
-				$("#register").css("background-color","#f5f5f5")	
+				$("#register_btn").attr("disabled",true)
+				$("#register_btn").css("background-color","#f5f5f5")	
 			}	
 		})
 		
@@ -149,9 +150,9 @@
 			var v3 = $("input[type='password']").val()
 			var k = e.keyCode
 			if( v1 != "" && v2 != "" && v3 != "" && k == 13 ){
-				register()
+				// document.getElementById("register_btn").click()
+				  register()   
 			}
-			
 		})
 		
 		// password图片按钮转换明暗文
