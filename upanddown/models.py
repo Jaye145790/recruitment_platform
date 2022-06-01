@@ -40,5 +40,5 @@ class Interviewee(db.Document):
     resume = db.BooleanField(default=True)
     interview = db.BooleanField(default=True)
     dept = db.StringField(default="")
-    thinkTime = db.IntField(default=-1) #-1
+    thinkDate = db.IntField(default=-1) #-1
     hire = db.BooleanField(default=False)

@@ -21,7 +21,7 @@ download_floder = os.path.join(basedir, "upload")
 
 
 # icon10是简历按钮、icon11是面试按钮、icon7是录用按钮
-def url_list(id, filename, name, gender, school, major, education, graduated, experience, level, resume, interview, hire,dept,thinkTime):
+def url_list(id, filename, name, gender, school, major, education, graduated, experience, level, resume, interview, hire,dept,thinkDate):
     res = "<tr style='height: 45px;' id='{}'><td><input type='button' id='{}' value='❌' onclick='delete_file(event)'></td>" \
            "<td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td>" \
            "<td><a href='{}'><div onclick='b1_1(this)' name='resume' class='b1' style='background-image: " \
@@ -30,7 +30,7 @@ def url_list(id, filename, name, gender, school, major, education, graduated, ex
            "</td><td><a href='javascript:;'><div onclick='b4_4(this)' name='hire' class='b4' " \
            "style='background-image: url(/static/img/iconThree.png);' value='{}'></div></a></div></td></tr>"\
         .format(id, filename, name, gender, school, major, education, graduated,
-                experience, level, "/download/" + filename, dept,thinkTime)
+                experience, level, "/download/" + filename, dept,thinkDate)
     print(resume,interview)
     if resume:
         res = res.replace('iconOne', 'icon10')
@@ -84,6 +84,16 @@ def success():
 @app.route("/error")
 def error():
     return render_template("error.html")
+
+
+@app.route("/changepassword", methods=["POST", "GET"])
+def changepassword():
+    return render_template("changepassword.html")
+
+
+@app.route("/changesuccess")
+def changesuccess():
+    return render_template("changesuccess.html")
 
 
 # 上传信息
@@ -220,10 +230,10 @@ def get_list():
     resume = [n.resume for n in Interviewee.objects()]
     interview = [n.interview for n in Interviewee.objects()]
     hire = [n.hire for n in Interviewee.objects()]
-    thinkTime = [n.thinkTime for n in Interviewee.objects()]
+    thinkDate = [n.thinkDate for n in Interviewee.objects()]
     dept = [n.dept for n in Interviewee.objects()]
     return jsonify(list(map(url_list, id,paths, name, gender, school, major,
-                            education, graduated, experience, level,resume,interview,hire,dept,thinkTime)))
+                            education, graduated, experience, level,resume,interview,hire,dept,thinkDate)))
 
 
 @app.route("/download/<string:filename>")
@@ -239,7 +249,7 @@ def update_user():
     if request.method == 'POST':
         data = request.form
         print('update_user',data)
-        Interviewee.objects(id=data['user_id']).update(thinkTime=data['thinkTime'],dept=data['dept'], resume=data['resume']=='true',interview=data['interview']=='true',hire=data['hire']=='true')
+        Interviewee.objects(id=data['user_id']).update(thinkDate=data['thinkDate'],dept=data['dept'], resume=data['resume']=='true',interview=data['interview']=='true',hire=data['hire']=='true')
         return 'OK'
 # 删除用户信息与简历功能
 @app.route("/delete_user/",methods=["POST"])

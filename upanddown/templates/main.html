@@ -234,7 +234,7 @@
 	        <div class="pic2">
 	            <a href="#"><img class="btn_icon4" src="/static/img/icon4.png" alt=""></a>
 				<div class="popUp-login" style="display: none;" onclick="closeLogin()">
-				    <a href="/forgot"><div>Change password</div></a>
+				    <a href="/changepassword"><div>Change password</div></a>
 				    <a href="/logout"><div style="border-top: 0px;">Sign Out</div></a>
 				</div>
 	        </div>
@@ -295,7 +295,7 @@
 		var popUpBox = document.querySelector('.popUp-box')
 		var popUpBox1 = document.querySelector('.popUp-box1')
 		var itemDom
-		
+		var TimeTotal = 172800;
 		//简历  只能下载一次
 		function b1_1(rot) {
 		    itemDom = rot.parentNode.parentNode.parentNode
@@ -394,6 +394,7 @@
 			itemDom.children[10].children[0].children[0].style.backgroundImage = 'url("/static/img/icon11.png")'
 			itemDom.children[11].children[0].style.display = 'none' // hide username
 			itemDom.children[12].children[0].children[0].style.backgroundImage = 'url("/static/img/icon7.png")'
+            itemDom.children[12].children[0].children[0].setAttribute('value',Date.parse(new Date()))
             update_user(itemDom)
 		}
 		// 关闭下拉框
@@ -401,36 +402,83 @@
 		    popUpLogin.style.display = 'none'
 		    cover.style.display = 'none';
 		}
-		console.log(itemDom);
+		setTimeout(function (){
+		    let ls = document.getElementsByClassName('b4');
+		    console.log(ls,ls.length);
+		    for(let i=0;i<ls.length;i++){
+		        let one = ls[i];
+		        let time = one.getAttribute('value');
+                console.log(one,i);
+		        if (time==-1)
+                    continue
+                hireDJS(parseInt(time)-Date.parse(new Date())/1000,one.parentNode.parentNode.parentNode);
+            }
+        },500);
+        function formatSeconds(value) {
+ var theTime = parseInt(value);// 需要转换的时间秒
+ var theTime1 = 0;// 分
+ var theTime2 = 0;// 小时
+ var theTime3 = 0;// 天
+ if(theTime > 60) {
+  theTime1 = parseInt(theTime/60);
+  theTime = parseInt(theTime%60);
+  if(theTime1 > 60) {
+   theTime2 = parseInt(theTime1/60);
+   theTime1 = parseInt(theTime1%60);
+   if(theTime2 > 24){
+    //大于24小时
+    theTime3 = parseInt(theTime2/24);
+    theTime2 = parseInt(theTime2%24);
+   }
+  }
+ }
+ var result = '';
+ if(theTime > 0){
+  result = ""+parseInt(theTime)+"秒";
+ }
+ if(theTime1 > 0) {
+  result = ""+parseInt(theTime1)+"分"+result;
+ }
+ if(theTime2 > 0) {
+  result = ""+parseInt(theTime2)+"小时"+result;
+ }
+ if(theTime3 > 0) {
+  result = ""+parseInt(theTime3)+"天"+result;
+ }
+ return result;
+}
 		//设置一个初始的事件值10s 用于b4_4录用按钮倒计时功能
 		//hireDJS()函数来进行hire按钮倒计时判断 当time==0则表示当前按钮倒计时完毕，需要将按钮恢复，并且重新赋值  若time!=0则表示当前正在倒计时，按钮禁用，并且时间time-1
-		function hireDJS() {
-            let time = itemDom.children[12].children[0].children[0].getAttribute('value');
-            console.log(time);
+		async function hireDJS(time,one) {
+
+            console.log(time,one.id,new Date());
+            {#显示倒计时#}
+            {#one.children[8].innerHTML=formatSeconds(time)#}
 		  if(time == 0){
 			  //10s倒计时结束，则hire按钮被禁用
 			  //itemDom.children[12].children[0].children[0].onclick = function(){return false;}
 			  //先将js对象转化成jquery对象 再用jquery中禁用按钮的方法
 			  $("itemDom.children[12].children[0].children[0]").removeAttr('onclick')
-			  itemDom.children[9].children[0].children[0].style.backgroundImage = 'url("/static/img/icon10.png")'
-			  itemDom.children[10].children[0].children[0].style.backgroundImage = 'url("/static/img/icon11.png")'
-			  itemDom.children[12].children[0].children[0].style.backgroundImage = 'url("/static/img/icon7.png")'
-			  itemDom.children[11].children[0].style.display = 'none' // hide username
-			  time = 20
-              update_user(itemDom)
+			  one.children[9].children[0].children[0].style.backgroundImage = 'url("/static/img/icon10.png")'
+			  one.children[10].children[0].children[0].style.backgroundImage = 'url("/static/img/icon11.png")'
+			  one.children[12].children[0].children[0].style.backgroundImage = 'url("/static/img/icon7.png")'
+			  one.children[11].children[0].style.display = 'none' // hide username
+              one.children[12].children[0].children[0].setAttribute('value',-1)
+              update_user(one)
 			  //清除定时器
 			  return false
-		}else if(itemDom.children[12].children[0].children[0].style.backgroundImage == 'url("/static/img/icon7.png")'){
+		}else if(one.children[12].children[0].children[0].style.backgroundImage == 'url("/static/img/icon7.png")'){
 				$("itemDom.children[12].children[0].children[0]").removeAttr('onclick')
 				time = 10
 				//清除定时器
 				return false
 			}else {
-				itemDom.children[12].children[0].children[0].setAttribute('value',time-1)
+				time=time-1
 			}
+
 		  //设置一个定时器
 		    setTimeout(function() {
-				  hireDJS()
+				  hireDJS(time,one)
 			  }, 1000)
 		}
 		
@@ -443,12 +491,17 @@
 		    itemDom.children[9].children[0].children[0].style.backgroundImage = 'url("/static/img/icon5.png")'
 		    itemDom.children[12].children[0].children[0].style.backgroundImage = 'url("/static/img/icon9.png")'
 			$("itemDom.children[12].children[0].children[0]").attr('onclick')
-            itemDom.children[12].children[0].children[0].setAttribute('value',20);
-
+            itemDom.children[12].children[0].children[0].setAttribute('value',parseInt(Date.parse(new Date()))/1000+TimeTotal);
             update_user(itemDom);
-            new Promise(function (resolve, reject) {
-            hireDJS()
-}).then();
+            console.log(Date.parse(new Date()));
+            let ls = document.getElementsByClassName('b4');
+		    for(let i in ls){
+		        let one = ls.item(i);
+		        let time = one.getAttribute('value');
+		        if (time==-1)
+                    continue
+		        hireDJS(parseInt(time)-Date.parse(new Date())/1000,one.parentNode.parentNode.parentNode);
+            }
 	        //在confirm()内部调用hireDJS()函数
 
 			
@@ -484,7 +537,7 @@
                 else data[name] = testStr.test(one.style.backgroundImage)==false;
 
             }
-            data['thinkTime'] = ls[3].getAttribute('value');
+            data['thinkDate'] = ls[3].getAttribute('value');
             console.log(data,);
             $.ajax({
                 url: "/update_user/",
