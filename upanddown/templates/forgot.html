@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="/static/js/jquery-3.3.1.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/static/css/toastr.min.css" />
+	<script src="/static/js/toastr.min.js"></script>
     <title>Forgot</title>
     <style>
         *{
@@ -44,20 +47,16 @@
             border-radius: 10px;
             border: 1px solid #afafaf;
         }
-        .title2 button{
-            background: #9edbff;
-            display: block;
+        .title2 #continue_btn{
+            background: #f5f5f5;
+			color: #aca899;
+			font-size: 16px;
             margin: 24px auto 0;
-            border: none;
-            outline: none;
-            border-radius: 6px;
+            border: 2px solid #afafaf;
+			padding-left: 2px;
+			width: 78px;
             height: 30px;
-        }
-        .title2 button a{
-            text-decoration: none;
-            color: #fff;
-            display: block;
-            padding: 0 24px;
+			text-align: center;
         }
 		/* .title2 input[type="text"]:focus{
 			background: #f0ecec;
@@ -76,16 +75,33 @@
 			outline: none;
 		}
 		.title2 input::placeholder{
-			color: #9edbff;
+			color: gray;
 			font-size: 15px;
 			font-weight: 400;
+			opacity: 0.5;
 		}
         form{
             margin-top: 20px;
         }
+		#warn_span{
+			/* visibility: hidden;
+			由于span是行内元素，所有span无法设置宽度与高度，因此下面的width\height不起作用
+			span的大小宽度和高度取决于内部的文字大小多少
+			现在想要的效果是让span在不放文字的时候任然占据一定的空间位子  想到用block
+			width：100%实现元素随页面的自适应移动达到保持相对位置不变
+			width: 280px;
+			height: 28px;
+			left: 30%; */
+			/* 下面四行代码的想法是在span元素内部为空的思想下实现的  
+			通过display：block将span转为块元素可以设置高度宽度来占位 */
+			display: block;
+			width: 100%;
+			height: 18px;
+			left: 30%;
+		}
 		.title3{
 			width: 100%;
-			margin-top: 12px;
+			margin-top: 24px;
 			text-align: center;
 		}
 		.title3 a:hover{
@@ -103,15 +119,98 @@
             Username
 		</h2>
             <form action="#">
-                <input type="text" placeholder="first name" >
-                <input type="text" placeholder="last name">
-                <input type="email" placeholder="email address">
-                <button><a href="/success">Continue</a></button>
+                <input type="text" class="input_on" id="firstname" placeholder="first name" >
+                <input type="text" class="input_on" id="lastname" placeholder="last name">
+                <input type="email" class="input_on" id="emailaddress" placeholder="email address">
+              <!--  <button><a href="/success">Continue</a></button> -->
+			  <!-- forgot函数用于处理忘记密码 提交处理用于将new password发到邮箱 -->
+			 <!--   <input type="button"  id="continue_btn" value="continue" onclick="forgot()" disabled /> -->
             </form>
+			   <span id="warn_span"></span>
+		  <input type="button"  id="continue_btn" value="continue" onclick="forgot()" disabled /> 
     </div>
 	<div class="title3">
 			<a href="/login">已回忆起密码，返回登录页面</a>
 	</div>
-
+    <script>
+	   //当本页面当三个输入框全部都输入信息后，continue按钮才能被启用
+	    $(".input_on").on('input',function(){
+	   	var v1 = $("#firstname").val()
+	   	var v2 = $("#lastname").val()
+	   	var v3 = $("#emailaddress").val()
+		var pattern = /^[A-Za-z0-9]+\@(foxconn.com|mail.foxconn.com)$/
+	   	if( v1 != "" && v2 != "" &&  (pattern.test(v3)) ){
+	   		$("#continue_btn").attr("disabled",false)
+	   		$("#continue_btn").css("background-color","#04f")
+	   		$("#continue_btn").css("color","#fff")
+	   		$("#continue_btn").css({"font-size":"16px","font-weight":"400"})
+	   	}else{ 
+	   		$("#continue_btn").attr("disabled",true)
+	   		$("#continue_btn").css("background-color","#f5f5f5")	
+			$("#continue_btn").css("color","#aca899")	
+	   	}	
+	   })
+	   
+	   //输入框焦点的上下移动
+	   var inputs = $("input[type='text'],input[type='email']")
+	   inputs.keydown(function(e){
+	   	var k = e.keyCode
+	   	var i = inputs.index($(this))
+	   	if( i <= (inputs.length - 2 ) && k == 40 || i <= (inputs.length-2 ) && k == 13 ){
+	   		inputs[i+1].focus()
+	   	}else if( i >= 1 && k == 38 ){
+	   		inputs[i-1].focus()
+	   	}
+	   })
+	   
+	   //enter实现同注册按钮的点击功能
+	   $(".input_on").keydown(function(e){
+	   	// 利用jquery获取元素value值
+	   	var v1 = $("#firstname").val()
+	   	var v2 = $("#lastname").attr("value")
+	   	var v3 = $("input[type='email']").val()
+	   	var k = e.keyCode
+	   	if( v1 != "" && v2 != "" && v3 != "" && k == 13 ){
+	   		//等同于效果 document.getElementById("continue_btn").click()
+	   		  forgot()   
+	   	}
+	   })
+	   
+	   //邮箱格式验证
+	   var emailaddr = document.getElementById("emailaddress")
+	   var warnspan = document.getElementById("warn_span")
+	   $("#emailaddress").on('input',function(){
+		    var pattern = /^[A-Za-z0-9]+\@(foxconn.com|mail.foxconn.com)$/
+		   	   if(pattern.test(this.value)){
+		   		   emailaddr.style.backgroundColor = "green"
+		              warnspan.innerHTML = "<font color='green'>email format is correct</font>"
+		   	   }else if( pattern.test(this.value)!= true && this.value != "" ){
+		   		    emailaddr.style.backgroundColor = "#fc5531"
+		   			 warnspan.style.visibility = "visible"
+		   			 warnspan.innerHTML = "<font color='red'>enter a valid email address</font>"
+		   	   }else{
+		   		    emailaddr.style.backgroundColor = "#fc5531"
+		   		    warnspan.style.visibility = "visible"
+		   		    warnspan.innerHTML = "<font color='red'>please enter your email address</font>"
+		   	   }
+	   })
+	   //下面的onblur触发不友好  想到用jquery中的keydown触发
+	   // emailaddr.onblur = function(){
+		  //  //匿名函数写法  等同于在eamiladdressinput框中加入一个onblur="validate()"函数
+		  //  var pattern = /^[A-Za-z0-9]+\@(foxconn.com|mail.foxconn.com)$/
+		  //  if(pattern.test(this.value)){
+			 //   emailaddr.style.backgroundColor = "green"
+    //            warnspan.innerHTML = "<font color='green'>email format is correct</font>"
+		  //  }else if( pattern.test(this.value)!= true && this.value != "" ){
+			 //    emailaddr.style.backgroundColor = "#fc5531"
+				//  warnspan.style.visibility = "visible"
+				//  warnspan.innerHTML = "<font color='red'>enter a valid email address</font>"
+		  //  }else{
+			 //    emailaddr.style.backgroundColor = "#fc5531"
+			 //    warnspan.style.visibility = "visible"
+			 //    warnspan.innerHTML = "<font color='red'>please enter your email address</font>"
+		  //  }
+	   // }
+    </script>
 </body>
 </html>

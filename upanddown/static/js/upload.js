@@ -26,7 +26,6 @@ function get_list() {
 			$.each(result, function(index) {
 				// 显示主页简历信息
 				$("#filelist").append(result[index]).append('</br>')
-				console.log(result)
 			})
 		},
 	})

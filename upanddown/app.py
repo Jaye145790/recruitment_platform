@@ -21,16 +21,16 @@ download_floder = os.path.join(basedir, "upload")
 
 
 # icon10是简历按钮、icon11是面试按钮、icon7是录用按钮
-def url_list(id, filename, name, gender, school, major, education, graduated, experience, level, resume, interview, hire,dept):
+def url_list(id, filename, name, gender, school, major, education, graduated, experience, level, resume, interview, hire,dept,thinkDate):
     res = "<tr style='height: 45px;' id='{}'><td><input type='button' id='{}' value='❌' onclick='delete_file(event)'></td>" \
            "<td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td>" \
            "<td><a href='{}'><div onclick='b1_1(this)' name='resume' class='b1' style='background-image: " \
            "url(/static/img/iconOne.png);'></div></a></td><td><a href='javascript:;'><div onclick='b2_2(this)' name='interview' " \
            "class='b2' style='background-image: url(/static/img/iconTwo.png);'></div></a></td><td><div name='dept'>{}</div> " \
            "</td><td><a href='javascript:;'><div onclick='b4_4(this)' name='hire' class='b4' " \
-           "style='background-image: url(/static/img/iconThree.png);'></div></a></div></td></tr>"\
+           "style='background-image: url(/static/img/iconThree.png);' value='{}'></div></a></div></td></tr>"\
         .format(id, filename, name, gender, school, major, education, graduated,
-                experience, level, "/download/" + filename, dept)
+                experience, level, "/download/" + filename, dept,thinkDate)
     print(resume,interview)
     if resume:
         res = res.replace('iconOne', 'icon10')
@@ -84,6 +84,54 @@ def success():
 @app.route("/error")
 def error():
     return render_template("error.html")
+
+
+@app.route("/changepassword", methods=["POST", "GET"])
+@login_required
+def changepassword():
+    if request.method=="GET":
+        return render_template("changepassword.html")
+    if request.method=='POST':
+        err_msg = {"result": "NO"}
+        param = json.loads(request.data.decode("utf-8"))
+        username = param.get("username","")
+        oldpassword = param.get("oldpassword","")
+        newpassword = param.get("newpassword","")
+        resetpassword = param.get("resetpassword","")
+        if not username:
+            err_msg["msg"] = "缺少用户名"
+            return jsonify(err_msg)
+        if not  oldpassword:
+            err_msg["msg"] = "缺少oldpassword"
+            return jsonify(err_msg)
+        if not newpassword:
+            err_msg["msg"] = "缺少newpassword"
+            return jsonify(err_msg)
+        if not resetpassword:
+            err_msg["msg"] = "缺少resetpassword"
+            return jsonify(err_msg)
+        print(type(User.objects(username=username)))
+        if User.objects(username=username)==[]:
+            err_msg["msg"] = "user no exits"
+            return jsonify(err_msg)
+        if newpassword!=resetpassword:
+            err_msg["msg"] = "newpassword no equals resetpassword"
+            return jsonify(err_msg)
+        user = User.objects(username=username)[0]
+        if user.verify_password(oldpassword):
+            user.hash_password(newpassword)
+            user.save()
+        else:
+            err_msg["msg"] = "oldpassword is incorrect"
+            return jsonify(err_msg)
+
+        return jsonify({"result": "OK", "next_url": "/changesuccess"})
+
+
+
+@app.route("/changesuccess")
+def changesuccess():
+    return render_template("changesuccess.html")
 
 
 # 上传信息
@@ -142,14 +190,14 @@ def register():
             return jsonify(err_msg)
         user = User.objects(username=username)
         if not user:
-            random_floder = random.randint(0, 10000)
-            while random_floder in os.listdir(download_floder):
-                random_floder = random.randint(0, 10000)
+            # random_floder = random.randint(0, 10000)
+            # while random_floder in os.listdir(download_floder):
+            #     random_floder = random.randint(0, 10000)
             user = User(username=username,
                         nickname=nickname,
-                        floder=str(random_floder))
+                        floder=str(4125))
             user.hash_password(password)
-            os.mkdir(os.path.join(download_floder, user.floder))
+            # os.mkdir(os.path.join(download_floder, user.floder))
             return jsonify({"result": "OK"})
         else:
             err_msg["msg"] = "用户已经注册"
@@ -220,9 +268,10 @@ def get_list():
     resume = [n.resume for n in Interviewee.objects()]
     interview = [n.interview for n in Interviewee.objects()]
     hire = [n.hire for n in Interviewee.objects()]
+    thinkDate = [n.thinkDate for n in Interviewee.objects()]
     dept = [n.dept for n in Interviewee.objects()]
     return jsonify(list(map(url_list, id,paths, name, gender, school, major,
-                            education, graduated, experience, level,resume,interview,hire,dept)))
+                            education, graduated, experience, level,resume,interview,hire,dept,thinkDate)))
 
 
 @app.route("/download/<string:filename>")
@@ -238,7 +287,7 @@ def update_user():
     if request.method == 'POST':
         data = request.form
         print('update_user',data)
-        Interviewee.objects(id=data['user_id']).update(dept=data['dept'], resume=data['resume']=='true',interview=data['interview']=='true',hire=data['hire']=='true')
+        Interviewee.objects(id=data['user_id']).update(thinkDate=data['thinkDate'],dept=data['dept'], resume=data['resume']=='true',interview=data['interview']=='true',hire=data['hire']=='true')
         return 'OK'
 # 删除用户信息与简历功能
 @app.route("/delete_user/",methods=["POST"])
