@@ -318,7 +318,7 @@
 				popUpBox.parentNode.style.display = 'block';
 				//此处在进入到confirm()函数中处理了面试按钮图片的切换功能 实现了由图11变成图6
 			}else if(itemDom.children[10].children[0].children[0].style.backgroundImage == 'url("/static/img/icon6.png")' ){
-				itemDom.children[10].children[0].children[0].onclick = function(){return false;}
+				itemDom.children[10].children[0].children[0].removeAttribute('onclick')
 			}
 			
 			
@@ -333,7 +333,7 @@
 				popUpBox1.parentNode.style.display = 'block';
 			}else if(itemDom.children[12].children[0].children[0].style.backgroundImage == 'url("/static/img/icon7.png")' ){
 			//当录用按钮图标按钮变灰则禁用录用按钮的b4_4onclick事件  js对象禁用onclick
-				 itemDom.children[12].children[0].children[0].onclick = function(){return false;}
+				 itemDom.children[12].children[0].children[0].removeAttribute('onclick')
 			}
 		    
 		}
@@ -408,74 +408,44 @@
 		    console.log(ls,ls.length);
 		    for(let i=0;i<ls.length;i++){
 		        let one = ls[i].children[12].children[0].children[0];
-		        console.log(ls[i].children[11].innerText,admin_name,ls[i].children[11].innerText==admin_name);
+		        console.log(ls[i].children[11].innerText,admin_name,ls[i].children[11].innerText!=admin_name);
 		        if (ls[i].children[11].innerText!=admin_name){
-		            console.log('no show');
+		            console.log(ls[i])
 		            ls[i].children[12].children[0].children[0].style.backgroundImage = 'url("/static/img/icon7.png")'
-                    ls[i].children[12].children[0].children[0].onclick = function(){return false;}
+                    ls[i].children[12].children[0].children[0].removeAttribute('onclick')
                 }
 		        let time = one.getAttribute('value');
                 {#console.log(one,i);#}
 		        if (time==-1)
                     continue
-                hireDJS(parseInt(time)-Date.parse(new Date())/1000,one.parentNode.parentNode.parentNode);
+                let n= parseInt(time)-Date.parse(new Date())/1000
+                hireDJS(n,one.parentNode.parentNode.parentNode);
             }
         },70);
-        function formatSeconds(value) {
- var theTime = parseInt(value);// 需要转换的时间秒
- var theTime1 = 0;// 分
- var theTime2 = 0;// 小时
- var theTime3 = 0;// 天
- if(theTime > 60) {
-  theTime1 = parseInt(theTime/60);
-  theTime = parseInt(theTime%60);
-  if(theTime1 > 60) {
-   theTime2 = parseInt(theTime1/60);
-   theTime1 = parseInt(theTime1%60);
-   if(theTime2 > 24){
-    //大于24小时
-    theTime3 = parseInt(theTime2/24);
-    theTime2 = parseInt(theTime2%24);
-   }
-  }
- }
- var result = '';
- if(theTime > 0){
-  result = ""+parseInt(theTime)+"秒";
- }
- if(theTime1 > 0) {
-  result = ""+parseInt(theTime1)+"分"+result;
- }
- if(theTime2 > 0) {
-  result = ""+parseInt(theTime2)+"小时"+result;
- }
- if(theTime3 > 0) {
-  result = ""+parseInt(theTime3)+"天"+result;
- }
- return result;
-}
 		//设置一个初始的事件值10s 用于b4_4录用按钮倒计时功能
 		//hireDJS()函数来进行hire按钮倒计时判断 当time==0则表示当前按钮倒计时完毕，需要将按钮恢复，并且重新赋值  若time!=0则表示当前正在倒计时，按钮禁用，并且时间time-1
 		async function hireDJS(time,one) {
 
-            console.log(time,one.id,new Date());
+            {#console.log(time,one.id,new Date());#}
             {#显示倒计时#}
             {#one.children[8].innerHTML=formatSeconds(time)#}
-		  if(time == 0){
+		  if(time <= 0){
 			  //10s倒计时结束，则hire按钮被禁用
 			  //itemDom.children[12].children[0].children[0].onclick = function(){return false;}
 			  //先将js对象转化成jquery对象 再用jquery中禁用按钮的方法
-			  $("itemDom.children[12].children[0].children[0]").removeAttr('onclick')
+
 			  one.children[9].children[0].children[0].style.backgroundImage = 'url("/static/img/icon10.png")'
 			  one.children[10].children[0].children[0].style.backgroundImage = 'url("/static/img/icon11.png")'
-			  one.children[12].children[0].children[0].style.backgroundImage = 'url("/static/img/icon7.png")'
+			  one.children[12].children[0].children[0].removeAttribute('onclick')
+              one.children[12].children[0].children[0].style.backgroundImage = 'url("/static/img/icon7.png")'
 			  one.children[11].children[0].style.display = 'none' // hide username
               one.children[12].children[0].children[0].setAttribute('value',-1)
               update_user(one)
 			  //清除定时器
 			  return false
 		}else if(one.children[12].children[0].children[0].style.backgroundImage == 'url("/static/img/icon7.png")'){
-				$("itemDom.children[12].children[0].children[0]").removeAttr('onclick')
+                one.children[12].children[0].children[0].removeAttribute('onclick')
+
 				time = 10
 				//清除定时器
 				return false
@@ -497,10 +467,10 @@
 		    popUpBox.parentNode.style.display = 'none';
 		    itemDom.children[9].children[0].children[0].style.backgroundImage = 'url("/static/img/icon5.png")'
 		    itemDom.children[12].children[0].children[0].style.backgroundImage = 'url("/static/img/icon9.png")'
-			$("itemDom.children[12].children[0].children[0]").attr('onclick')
+			itemDom.children[12].children[0].children[0].setAttribute('onclick','b4_4(this)')
             itemDom.children[12].children[0].children[0].setAttribute('value',parseInt(Date.parse(new Date()))/1000+TimeTotal);
-            update_user(itemDom);
-            console.log(Date.parse(new Date()));
+            update_user(itemDom);``
+            {#console.log(Date.parse(new Date()));#}
             let ls = document.getElementsByClassName('b4');
 		    for(let i in ls){
 		        let one = ls.item(i);
@@ -532,7 +502,7 @@
 		    let ls = itemDom.getElementsByTagName('div');
 
 		    let testStr = /icon[567]/
-            console.log('update_user')
+            {#console.log('update_user')#}
 		    for(let i=0;i<ls.length;i++){
 		        let one = ls[i];
 		        let name = one.getAttribute("name");
@@ -545,7 +515,7 @@
 
             }
             data['thinkDate'] = ls[3].getAttribute('value');
-            console.log(data,);
+            {#console.log(data,);#}
             $.ajax({
                 url: "/update_user/",
                 type: "post",
